@@ -4,20 +4,23 @@
 
 ### Your agentic hiring team.
 
-Orange replaces the busywork of recruiting. Describe a role, drop in the CVs, and it reads every one, ranks the shortlist, and shows its work. Sourcing to offer, run by AI, so a team can hire without a recruiting ops function behind it.
+Orange replaces the busywork of recruiting. Describe a role, drop in the CVs, and it reads every one, ranks the shortlist, and shows its work. Sourcing to offer, run by AI.
+
+![status](https://img.shields.io/badge/status-prototype-EA580C?style=flat-square)
+![Next.js](https://img.shields.io/badge/Next.js-000000?style=flat-square&logo=nextdotjs&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=flat-square&logo=fastapi&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-336791?style=flat-square&logo=postgresql&logoColor=white)
 
 <br>
 
-<a href="#roadmap"><b>Roadmap</b></a>
-
-<br>
-
-<!-- Record a 15 to 30s screen capture of the full loop (chat to JD, upload CVs, ranked board, reasoning) and save it as docs/demo.gif. This is the hero. -->
+<!-- Record a 15 to 30s screen capture of the full loop and save it as docs/demo.gif. This is the hero. -->
 <img src="docs/demo.gif" alt="Orange turning a job description and a stack of CVs into a ranked, explained shortlist" width="840">
 
 </div>
 
 <br>
+
+> **Early prototype.** The core loop works end to end today. Everything under [Roadmap](#roadmap) is where we take it next.
 
 ## What it does
 
@@ -69,14 +72,18 @@ We start where hiring hurts most and expand until the whole pipeline runs itself
 
 ## Stack
 
-| Layer | Choice |
-|---|---|
-| Web | Next.js · TypeScript · Tailwind |
-| API | Next.js route handlers (BFF) |
-| Agents | Python · FastAPI |
-| Reasoning | Claude / OpenAI |
-| Data | PostgreSQL + `pgvector` |
-| Infra | Vercel · Railway |
+Lean now so it ships fast. Built to grow into a stack that scales.
+
+| | Now (prototype) | At scale |
+|---|---|---|
+| Web | Next.js · TypeScript · Tailwind | Next.js |
+| API and services | Next.js route handlers (BFF) | Go services |
+| Agents | Python · FastAPI | Python · FastAPI |
+| Reasoning | Claude / OpenAI | Claude / OpenAI + tuned models |
+| Vector search | Postgres + `pgvector` | dedicated vector DB (Qdrant / Pinecone) |
+| Queue and cache | in-process queue | Redis + event stream |
+| Data | PostgreSQL | PostgreSQL + read replicas |
+| Infra | Vercel · Railway | AWS · Docker · Kubernetes |
 
 ## Run locally
 
@@ -94,4 +101,4 @@ cd ../ai && uv sync && uvicorn app.main:app --reload   # ai  ->  localhost:8000
 
 [@saahtiwana](https://github.com/saahtiwana) · [@ahmadmustafa02](https://github.com/ahmadmustafa02) · [@abdullahxdev](https://github.com/abdullahxdev)
 
-<sub>© 2026 Orange.</sub>
+<sub>© 2026 Orange</sub>
