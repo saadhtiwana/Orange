@@ -94,4 +94,4 @@ cd ../ai && uv sync && uvicorn app.main:app --reload   # ai  ->  localhost:8000
 
 [@saahtiwana](https://github.com/saahtiwana) · [@ahmadmustafa02](https://github.com/ahmadmustafa02) · [@abdullahxdev](https://github.com/abdullahxdev)
 
-<sub>© 2026 Orange. Built in Islamabad.</sub>
+<sub>© 2026 Orange.</sub>
