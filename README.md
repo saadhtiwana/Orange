@@ -8,7 +8,7 @@ Orange replaces the busywork of recruiting. Describe a role, drop in the CVs, an
 
 <br>
 
-<a href="https://orange.app"><b>Live demo</b></a> · <a href="#roadmap"><b>Roadmap</b></a>
+<a href="#roadmap"><b>Roadmap</b></a>
 
 <br>
 
