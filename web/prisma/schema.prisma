@@ -11,3 +11,51 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+model Job {
+  id              String   @id @default(cuid())
+  title           String
+  descriptionJson Json
+  status          String   @default("draft")
+  createdAt       DateTime @default(now())
+  scores          Score[]
+}
+
+model Candidate {
+  id        String    @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  source    String
+  createdAt DateTime  @default(now())
+  profiles  Profile[]
+  scores    Score[]
+}
+
+// Week 2: add a pgvector embedding column here — not implemented yet.
+model Profile {
+  id             String    @id @default(cuid())
+  candidateId    String
+  candidate      Candidate @relation(fields: [candidateId], references: [id])
+  rawText        String?
+  parsedJson     Json?
+  confidenceJson Json?
+  resumeUrl      String
+  createdAt      DateTime  @default(now())
+
+  @@index([candidateId])
+}
+
+model Score {
+  id                  String    @id @default(cuid())
+  candidateId         String
+  candidate           Candidate @relation(fields: [candidateId], references: [id])
+  jobId               String
+  job                 Job       @relation(fields: [jobId], references: [id])
+  overallScore        Float
+  dimensionScoresJson Json
+  reasoningText       String
+  createdAt           DateTime  @default(now())
+
+  @@index([candidateId])
+}
