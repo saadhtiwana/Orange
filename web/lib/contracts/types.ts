@@ -241,7 +241,7 @@ export interface Evidence {
   /**
    * Optional [start, end) offsets into raw_text.
    */
-  char_span?: [unknown, unknown] | null;
+  char_span?: CharSpan | null;
   confidence: number;
   /**
    * Where the quote came from, e.g. 'work_experience[1].highlights[0]' or 'raw_text'.
@@ -256,6 +256,17 @@ export interface Evidence {
    * Requirement this citation speaks to, if any.
    */
   requirement_id?: string | null;
+}
+/**
+ * A half-open `[start, end)` range of characters in `raw_text`.
+ *
+ * Modelled as an object rather than a two-tuple on purpose: a tuple becomes
+ * JSON Schema `prefixItems`, which the TypeScript generator does not
+ * understand and renders as `[unknown, unknown]`.
+ */
+export interface CharSpan {
+  end: number;
+  start: number;
 }
 export interface ScoreMeta {
   latency_ms?: number | null;

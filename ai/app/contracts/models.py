@@ -325,6 +325,18 @@ class CandidateProfile(ContractModel):
 # ---------------------------------------------------------------------------
 
 
+class CharSpan(ContractModel):
+    """A half-open `[start, end)` range of characters in `raw_text`.
+
+    Modelled as an object rather than a two-tuple on purpose: a tuple becomes
+    JSON Schema `prefixItems`, which the TypeScript generator does not
+    understand and renders as `[unknown, unknown]`.
+    """
+
+    start: int = Field(ge=0)
+    end: int = Field(ge=0)
+
+
 class Evidence(ContractModel):
     """A verbatim citation backing (or undercutting) a scoring claim."""
 
@@ -335,7 +347,7 @@ class Evidence(ContractModel):
         description="Where the quote came from, e.g. 'work_experience[1].highlights[0]' "
         "or 'raw_text'.",
     )
-    char_span: tuple[int, int] | None = Field(
+    char_span: CharSpan | None = Field(
         default=None, description="Optional [start, end) offsets into raw_text."
     )
     polarity: EvidencePolarity = EvidencePolarity.SUPPORTS

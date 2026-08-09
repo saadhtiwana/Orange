@@ -190,6 +190,26 @@
       "title": "Certification",
       "type": "object"
     },
+    "CharSpan": {
+      "additionalProperties": false,
+      "description": "A half-open `[start, end)` range of characters in `raw_text`.\n\nModelled as an object rather than a two-tuple on purpose: a tuple becomes\nJSON Schema `prefixItems`, which the TypeScript generator does not\nunderstand and renders as `[unknown, unknown]`.",
+      "properties": {
+        "end": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "start": {
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "start",
+        "end"
+      ],
+      "title": "CharSpan",
+      "type": "object"
+    },
     "Compensation": {
       "additionalProperties": false,
       "properties": {
@@ -401,17 +421,7 @@
         "char_span": {
           "anyOf": [
             {
-              "maxItems": 2,
-              "minItems": 2,
-              "prefixItems": [
-                {
-                  "type": "integer"
-                },
-                {
-                  "type": "integer"
-                }
-              ],
-              "type": "array"
+              "$ref": "#/$defs/CharSpan"
             },
             {
               "type": "null"
