@@ -5,6 +5,7 @@ from __future__ import annotations
 from functools import lru_cache
 from pathlib import Path
 
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 APP_DIR = Path(__file__).resolve().parent
@@ -30,7 +31,7 @@ class Settings(BaseSettings):
     llm_max_tokens: int = 16000
     llm_timeout_seconds: float = 120.0
 
-    cors_origins: list[str] = ["http://localhost:3000"]
+    cors_origins: list[str] = Field(default_factory=lambda: ["http://localhost:3000"])
     prompts_dir: Path = APP_DIR / "prompts"
 
 

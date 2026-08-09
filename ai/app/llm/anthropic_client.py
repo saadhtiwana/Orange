@@ -53,7 +53,9 @@ class AnthropicClient:
                 messages=[{"role": "user", "content": prompt}],
                 output_format=schema,
             )
-        except Exception as exc:  # noqa: BLE001 - re-raised as our own error type
+        except Exception as exc:
+            # Re-raised as our own type so callers never import the provider SDK
+            # just to catch its errors.
             raise LLMError(f"Anthropic request failed: {exc}") from exc
 
         # Check why generation stopped before touching the content: on a refusal
