@@ -74,6 +74,10 @@ export interface Education {
   end?: string | null;
   field?: string | null;
   gpa?: number | null;
+  /**
+   * Scale the GPA is reported on, e.g. '4.0', '5.0', '10.0', '100'. Copy what the CV states; do not convert between scales.
+   */
+  gpa_scale?: string | null;
   institution: string;
   start?: string | null;
 }

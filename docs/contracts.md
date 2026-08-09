@@ -96,6 +96,14 @@ The output of the CV parser. `work_experience[]`, `education[]`, `skills[]`, and
 
 Dates are calendar months (`"2024-07"`), never full dates — CVs almost never carry day precision, and inventing one would fabricate evidence.
 
+### Grades
+
+`Education.gpa` has **no upper bound**, and `Education.gpa_scale` records what the number means (`"4.0"`, `"5.0"`, `"10.0"`, `"100"`).
+
+Grading scales differ by country: 4.0 and 5.0 scales, CGPA out of 10, and raw percentages all appear on real CVs. An upper bound of 5 would not merely clamp an 8.5 CGPA — because these models are strict, it would raise a validation error and reject the **entire candidate profile** over one field.
+
+Copy the scale the CV states; never convert between scales. A `gpa` without a `gpa_scale` is unscaled and should not be compared against anything.
+
 ## ScoreWithEvidence
 
 The output of the ranker.

@@ -321,7 +321,6 @@
         "gpa": {
           "anyOf": [
             {
-              "maximum": 5,
               "minimum": 0,
               "type": "number"
             },
@@ -330,6 +329,18 @@
             }
           ],
           "default": null
+        },
+        "gpa_scale": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Scale the GPA is reported on, e.g. '4.0', '5.0', '10.0', '100'. Copy what the CV states; do not convert between scales."
         },
         "institution": {
           "type": "string"

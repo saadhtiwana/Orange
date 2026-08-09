@@ -259,7 +259,17 @@ class Education(ContractModel):
     field: str | None = None
     start: str | None = Field(default=None, pattern=MONTH_PATTERN)
     end: str | None = Field(default=None, pattern=MONTH_PATTERN)
-    gpa: float | None = Field(default=None, ge=0, le=5)
+    # Deliberately unbounded above. Grading scales vary by country — 4.0 and
+    # 5.0 scales, CGPA out of 10, and raw percentages all appear on real CVs —
+    # and because these models are strict, an out-of-range value would fail the
+    # whole profile rather than just this field. `gpa_scale` is what makes the
+    # number interpretable; without it, treat `gpa` as unscaled and untrusted.
+    gpa: float | None = Field(default=None, ge=0)
+    gpa_scale: str | None = Field(
+        default=None,
+        description="Scale the GPA is reported on, e.g. '4.0', '5.0', '10.0', '100'. "
+        "Copy what the CV states; do not convert between scales.",
+    )
 
 
 class Skill(ContractModel):
