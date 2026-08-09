@@ -1,32 +1,87 @@
 # Contributing to Orange
 
-## Branch → PR → review
+How we work on Orange: small branches, reviewed PRs, and a working slice shipped every week.
 
-`main` is protected. Nothing lands on it directly.
+## Repo layout
 
-1. **Branch off `main`.** Name it for the change: `feat/job-intelligence`, `fix/cv-parser-dates`. Not `malik/week-2`.
-2. **Commit as you go**, in small conventional commits — see below.
-3. **Run the checks locally** before you push (the same ones CI runs):
-   ```bash
-   cd web && npm run lint && npm run format:check && npm run typecheck && npm test && npm run build
-   cd ai  && uv run ruff check . && uv run ruff format --check . && uv run mypy app scripts && uv run pytest
-   ```
-4. **Open a PR against `main`**, filling in the template. Title it by what the code does.
-5. **One approving review** from another engineer is required. CI must be green — the `web`, `ai`, and `contracts` checks are required and block the merge.
-6. **The author does not merge their own PR.** The reviewer merges.
+| Path         | What lives there                                                        |
+| ------------ | ----------------------------------------------------------------------- |
+| `web/`       | Next.js app — UI and the route handlers that act as our BFF              |
+| `ai/`        | FastAPI service — the Job Architect, CV parsing, and ranking agents      |
+| `contracts/` | Shared JSON Schemas: the interface every vertical codes against          |
+| `db/`        | Database bootstrap — extensions and seed SQL                             |
+| `docs/`      | Design notes and the contract reference                                  |
 
-## Conventional commits
+The contracts are generated from `ai/app/contracts/models.py`. Never hand-edit anything in `contracts/` or `web/lib/contracts/` — see [docs/contracts.md](docs/contracts.md).
+
+## Local setup
+
+Everything runs locally in containers. Nothing is deployed yet, and there is no cloud database — `DATABASE_URL` points at localhost.
+
+**Prerequisites:** Node 22+, [uv](https://docs.astral.sh/uv/), and Docker.
+
+Copy the environment template and fill in your keys:
+
+```bash
+cp .env.example .env
+```
+
+You need an `ANTHROPIC_API_KEY` for the AI service. The database credentials in the template match what Docker Compose starts, so they work as-is.
+
+**Database** — Postgres with `pgvector`:
+
+```bash
+docker compose up -d
+```
+
+**Web app** — on `localhost:3000`:
+
+```bash
+cd web
+npm install
+npm run dev
+```
+
+**AI service** — on `localhost:8000`:
+
+```bash
+cd ai
+uv sync
+uv run uvicorn app.main:app --reload
+```
+
+Run all three and the Job Architect works end to end.
+
+## Workflow
+
+Every change goes on a feature branch and lands through a pull request into `main`. Never push to `main` directly — it is protected, and it stays green.
+
+Branch names describe the change: `feat/job-intelligence`, `fix/cv-parser-dates`.
+
+Before you push, run the same checks CI runs:
+
+```bash
+# web/
+npm run lint && npm run format:check && npm run typecheck && npm test && npm run build
+
+# ai/
+uv run ruff check . && uv run ruff format --check . && uv run mypy app scripts && uv run pytest
+```
+
+Open the PR, fill in the template, and get one approving review. CI must be green before merge.
+
+### Conventional commits
 
 Every commit message is `type: what the code does`, in the imperative.
 
-| Type    | Use for                                                        |
-| ------- | -------------------------------------------------------------- |
-| `feat`  | New behaviour a user or another vertical can observe            |
-| `fix`   | A bug fix                                                       |
-| `chore` | Tooling, config, dependencies                                   |
-| `ci`    | CI workflow changes                                             |
-| `docs`  | Documentation only                                              |
-| `test`  | Tests only                                                      |
+| Type    | Use for                                             |
+| ------- | --------------------------------------------------- |
+| `feat`  | New behaviour a user or another vertical can observe |
+| `fix`   | A bug fix                                            |
+| `chore` | Tooling, config, dependencies                        |
+| `ci`    | CI workflow changes                                  |
+| `docs`  | Documentation only                                   |
+| `test`  | Tests only                                           |
 
 ```
 feat: add Job Architect endpoint
@@ -34,27 +89,32 @@ fix: preserve trailing months when parsing CV date ranges
 ci: cache uv downloads between runs
 ```
 
-Name commits and PRs by **what the code does**, never by week, phase, or sprint. `feat: add Job Architect endpoint`, not `week 2 work` or `phase 1 complete`.
+Name commits and pull requests by **what the code does**, never by week, phase, or sprint. Keep them small — one meaningful unit each.
 
-Keep commits small — one meaningful unit each. A schema, an endpoint, a config file. Reviewers read diffs, not squashed mega-commits.
+**No AI attribution in commit messages or PR bodies, ever.** No co-author trailers, no tool credits. The message contains the change description and nothing else.
 
-## Ownership
+## Weekly rhythm
 
-Three engineers own three verticals; the shared foundation is reviewed by whoever owns the piece you touched.
+We ship a working slice every week. Each week's work lands as reviewed, merged PRs by the end of the week — not as a branch that piles up.
 
-| Area                                             | Owner                       |
-| ------------------------------------------------ | --------------------------- |
-| `contracts/`, `ai/app/contracts/`                 | Shared — **review required from all three verticals** |
-| `web/prisma/schema.prisma` — `Job`                | Job Intelligence            |
-| `web/prisma/schema.prisma` — candidates, scores   | Ingestion / Ranking         |
-| `ai/app/routers/job_architect.py`                 | Job Intelligence            |
+Sunday standup is the weekly checkpoint. Everyone brings a demoable piece: something you can run and show, not a status update.
 
-Changing a contract changes everyone's code. Say so explicitly in the PR description and bump `SCHEMA_VERSION` if the change is breaking. See [docs/contracts.md](docs/contracts.md).
+## Module owners
 
-## Generated files
+| Owner                                                     | Modules                             |
+| --------------------------------------------------------- | ----------------------------------- |
+| Saad Hayat ([@saadhtiwana](https://github.com/saadhtiwana))         | Job Intelligence · AI runtime       |
+| Ahmad Mustafa ([@ahmadmustafa02](https://github.com/ahmadmustafa02)) | Ingestion & Profiles · Data/DevOps  |
+| Abdullah ([@abdullahxdev](https://github.com/abdullahxdev))         | Ranking & Pipeline · Design system  |
 
-`contracts/*.schema.json` and `web/lib/contracts/types.ts` are generated from `ai/app/contracts/models.py`. Never hand-edit them; regenerate and commit the result in the same commit as the model change. CI fails on drift.
+Tag the owner of any module your change touches. Changes to `contracts/` affect all three verticals — get sign-off from each.
 
-## Attribution
+## Progress log
 
-Commit messages and PR bodies contain the change description and nothing else — no `Co-Authored-By` trailers, no tool attribution.
+🏗️ scaffolding/infra · 🗄️ database/schema · 🤖 AI/agents · 🔌 API · 🎨 design/UI · 🧪 tests · ⚙️ CI/tooling · 📦 containers · 📝 docs · ✅ done · 🚧 in progress
+
+| Week   | Contributor | Shipped                                                                                                                                        |
+| ------ | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| Week 1 | Saad        | 📝 shared contracts · 🤖 AI service + Job Architect endpoint · 🔌 job chat wired · ⚙️ CI pipeline · 📦 Postgres+pgvector via Docker · 🏗️ repo guardrails 🚧 |
+| Week 1 | Ahmad       | 🏗️ Next.js scaffold · 🗄️ Prisma setup ✅                                                                                                          |
+| Week 1 | Abdullah    | 🎨 design system + Kanban shell 🚧                                                                                                                |
