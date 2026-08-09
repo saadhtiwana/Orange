@@ -1,0 +1,137 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # Tests never call a real LLM. No key is configured here on purpose — if a
+  # test starts needing one, it should fail rather than start billing us.
+  DATABASE_URL: postgresql://orange:orange@localhost:5432/orange?schema=public
+
+jobs:
+  web:
+    name: web (lint, format, types, tests, build)
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: pgvector/pgvector:pg17
+        env:
+          POSTGRES_USER: orange
+          POSTGRES_PASSWORD: orange
+          POSTGRES_DB: orange
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U orange -d orange"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    defaults:
+      run:
+        working-directory: web
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate Prisma client
+        run: npx prisma generate
+
+      - name: Apply migrations
+        run: npx prisma migrate deploy
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Check formatting
+        run: npm run format:check
+
+      - name: Type-check
+        run: npm run typecheck
+
+      - name: Test
+        run: npm test
+
+      - name: Build
+        run: npm run build
+
+  ai:
+    name: ai (ruff, mypy, pytest)
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ai
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          cache-dependency-glob: ai/uv.lock
+
+      - name: Install dependencies
+        run: uv sync --locked
+
+      - name: Lint
+        run: uv run ruff check .
+
+      - name: Check formatting
+        run: uv run ruff format --check .
+
+      - name: Type-check
+        run: uv run mypy app scripts
+
+      - name: Test
+        run: uv run pytest -q
+
+  contracts:
+    name: contracts (no drift)
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          cache-dependency-glob: ai/uv.lock
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - name: Install dependencies
+        run: |
+          uv sync --locked --directory ai
+          npm ci --prefix web
+
+      - name: Regenerate contracts from the Pydantic source of truth
+        run: |
+          uv run --directory ai python scripts/export_schemas.py
+          npm run gen:contracts --prefix web
+
+      - name: Fail if the committed artifacts are stale
+        run: |
+          if ! git diff --exit-code -- contracts web/lib/contracts; then
+            echo "::error::Contracts are out of date. Run 'uv run python scripts/export_schemas.py' in ai/ and 'npm run gen:contracts' in web/, then commit the result."
+            exit 1
+          fi
