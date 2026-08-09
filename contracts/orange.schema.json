@@ -1,0 +1,1227 @@
+{
+  "$defs": {
+    "CandidateProfile": {
+      "additionalProperties": false,
+      "description": "A parsed CV. Output of the CV parser, input to the ranker.",
+      "properties": {
+        "certifications": {
+          "items": {
+            "$ref": "#/$defs/Certification"
+          },
+          "type": "array"
+        },
+        "education": {
+          "items": {
+            "$ref": "#/$defs/Education"
+          },
+          "type": "array"
+        },
+        "emails": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "full_name": {
+          "type": "string"
+        },
+        "headline": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "languages": {
+          "items": {
+            "$ref": "#/$defs/LanguageSkill"
+          },
+          "type": "array"
+        },
+        "links": {
+          "items": {
+            "$ref": "#/$defs/Link"
+          },
+          "type": "array"
+        },
+        "location": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Location"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "logistics": {
+          "$ref": "#/$defs/Logistics"
+        },
+        "phones": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "raw_text": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Extracted CV text. Evidence quotes are verified against this."
+        },
+        "schema_version": {
+          "default": "1.0",
+          "type": "string"
+        },
+        "skills": {
+          "items": {
+            "$ref": "#/$defs/Skill"
+          },
+          "type": "array"
+        },
+        "source": {
+          "$ref": "#/$defs/ProfileSource"
+        },
+        "summary": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "total_years_experience": {
+          "anyOf": [
+            {
+              "maximum": 60,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "work_experience": {
+          "items": {
+            "$ref": "#/$defs/WorkExperience"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "source",
+        "full_name"
+      ],
+      "title": "CandidateProfile",
+      "type": "object"
+    },
+    "Certification": {
+      "additionalProperties": false,
+      "properties": {
+        "expires": {
+          "anyOf": [
+            {
+              "pattern": "^\\d{4}-(0[1-9]|1[0-2])$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "issued": {
+          "anyOf": [
+            {
+              "pattern": "^\\d{4}-(0[1-9]|1[0-2])$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "issuer": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "Certification",
+      "type": "object"
+    },
+    "Compensation": {
+      "additionalProperties": false,
+      "properties": {
+        "currency": {
+          "description": "ISO 4217 code, e.g. 'EUR'.",
+          "pattern": "^[A-Z]{3}$",
+          "type": "string"
+        },
+        "max": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "min": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "period": {
+          "$ref": "#/$defs/CompensationPeriod",
+          "default": "year"
+        }
+      },
+      "required": [
+        "currency"
+      ],
+      "title": "Compensation",
+      "type": "object"
+    },
+    "CompensationPeriod": {
+      "enum": [
+        "hour",
+        "month",
+        "year"
+      ],
+      "title": "CompensationPeriod",
+      "type": "string"
+    },
+    "DegreeLevel": {
+      "enum": [
+        "none",
+        "high_school",
+        "associate",
+        "bachelor",
+        "master",
+        "doctorate"
+      ],
+      "title": "DegreeLevel",
+      "type": "string"
+    },
+    "DimensionScore": {
+      "additionalProperties": false,
+      "properties": {
+        "dimension": {
+          "$ref": "#/$defs/ScoreDimension"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "type": "array"
+        },
+        "rationale": {
+          "type": "string"
+        },
+        "score": {
+          "maximum": 100,
+          "minimum": 0,
+          "type": "number"
+        },
+        "weight": {
+          "maximum": 1,
+          "minimum": 0,
+          "type": "number"
+        }
+      },
+      "required": [
+        "dimension",
+        "score",
+        "weight",
+        "rationale"
+      ],
+      "title": "DimensionScore",
+      "type": "object"
+    },
+    "Education": {
+      "additionalProperties": false,
+      "properties": {
+        "degree_level": {
+          "$ref": "#/$defs/DegreeLevel"
+        },
+        "end": {
+          "anyOf": [
+            {
+              "pattern": "^\\d{4}-(0[1-9]|1[0-2])$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "field": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "gpa": {
+          "anyOf": [
+            {
+              "maximum": 5,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "institution": {
+          "type": "string"
+        },
+        "start": {
+          "anyOf": [
+            {
+              "pattern": "^\\d{4}-(0[1-9]|1[0-2])$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "institution",
+        "degree_level"
+      ],
+      "title": "Education",
+      "type": "object"
+    },
+    "EducationRequirement": {
+      "additionalProperties": false,
+      "properties": {
+        "fields": {
+          "description": "Acceptable fields of study.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "minimum_level": {
+          "$ref": "#/$defs/DegreeLevel",
+          "default": "none"
+        }
+      },
+      "title": "EducationRequirement",
+      "type": "object"
+    },
+    "EmploymentType": {
+      "enum": [
+        "full_time",
+        "part_time",
+        "contract",
+        "internship",
+        "temporary"
+      ],
+      "title": "EmploymentType",
+      "type": "string"
+    },
+    "Evidence": {
+      "additionalProperties": false,
+      "description": "A verbatim citation backing (or undercutting) a scoring claim.",
+      "properties": {
+        "char_span": {
+          "anyOf": [
+            {
+              "maxItems": 2,
+              "minItems": 2,
+              "prefixItems": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "integer"
+                }
+              ],
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional [start, end) offsets into raw_text."
+        },
+        "confidence": {
+          "maximum": 1,
+          "minimum": 0,
+          "type": "number"
+        },
+        "locator": {
+          "description": "Where the quote came from, e.g. 'work_experience[1].highlights[0]' or 'raw_text'.",
+          "type": "string"
+        },
+        "polarity": {
+          "$ref": "#/$defs/EvidencePolarity",
+          "default": "supports"
+        },
+        "quote": {
+          "description": "Copied verbatim from the CV. Must appear in CandidateProfile.raw_text.",
+          "type": "string"
+        },
+        "requirement_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Requirement this citation speaks to, if any."
+        }
+      },
+      "required": [
+        "quote",
+        "locator",
+        "confidence"
+      ],
+      "title": "Evidence",
+      "type": "object"
+    },
+    "EvidencePolarity": {
+      "description": "Whether a quote backs a claim, undercuts it, or is a noted absence.\n\n`absent` exists so the model can record \"the CV never mentions Kubernetes\"\nas a first-class finding instead of staying silent about a gap.",
+      "enum": [
+        "supports",
+        "contradicts",
+        "absent"
+      ],
+      "title": "EvidencePolarity",
+      "type": "string"
+    },
+    "ExperienceRange": {
+      "additionalProperties": false,
+      "properties": {
+        "max": {
+          "anyOf": [
+            {
+              "maximum": 60,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "min": {
+          "anyOf": [
+            {
+              "maximum": 60,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "title": "ExperienceRange",
+      "type": "object"
+    },
+    "GenerationMeta": {
+      "additionalProperties": false,
+      "properties": {
+        "generated_at": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "model": {
+          "description": "Model id that produced this document.",
+          "type": "string"
+        },
+        "prompt_version": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "model",
+        "prompt_version",
+        "generated_at"
+      ],
+      "title": "GenerationMeta",
+      "type": "object"
+    },
+    "Importance": {
+      "enum": [
+        "must_have",
+        "nice_to_have"
+      ],
+      "title": "Importance",
+      "type": "string"
+    },
+    "JobDescription": {
+      "additionalProperties": false,
+      "description": "A structured role definition. Output of the Job Architect.",
+      "properties": {
+        "benefits": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "compensation": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Compensation"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "education": {
+          "$ref": "#/$defs/EducationRequirement"
+        },
+        "employment_type": {
+          "$ref": "#/$defs/EmploymentType"
+        },
+        "experience_years": {
+          "$ref": "#/$defs/ExperienceRange"
+        },
+        "id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Set by the persistence layer, not the model."
+        },
+        "keywords": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "languages": {
+          "items": {
+            "$ref": "#/$defs/LanguageSkill"
+          },
+          "type": "array"
+        },
+        "locations": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "meta": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/GenerationMeta"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "requirements": {
+          "items": {
+            "$ref": "#/$defs/Requirement"
+          },
+          "type": "array"
+        },
+        "responsibilities": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "schema_version": {
+          "default": "1.0",
+          "type": "string"
+        },
+        "seniority": {
+          "$ref": "#/$defs/Seniority"
+        },
+        "summary": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "work_mode": {
+          "$ref": "#/$defs/WorkMode"
+        }
+      },
+      "required": [
+        "title",
+        "seniority",
+        "employment_type",
+        "work_mode",
+        "summary"
+      ],
+      "title": "JobDescription",
+      "type": "object"
+    },
+    "LanguageProficiency": {
+      "enum": [
+        "basic",
+        "conversational",
+        "professional",
+        "native"
+      ],
+      "title": "LanguageProficiency",
+      "type": "string"
+    },
+    "LanguageSkill": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "description": "Language name, e.g. 'German'.",
+          "type": "string"
+        },
+        "proficiency": {
+          "$ref": "#/$defs/LanguageProficiency"
+        }
+      },
+      "required": [
+        "name",
+        "proficiency"
+      ],
+      "title": "LanguageSkill",
+      "type": "object"
+    },
+    "Link": {
+      "additionalProperties": false,
+      "properties": {
+        "label": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "label",
+        "url"
+      ],
+      "title": "Link",
+      "type": "object"
+    },
+    "Location": {
+      "additionalProperties": false,
+      "properties": {
+        "city": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "country": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "timezone": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "title": "Location",
+      "type": "object"
+    },
+    "Logistics": {
+      "additionalProperties": false,
+      "properties": {
+        "desired_compensation": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Compensation"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "notice_period": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "open_to_remote": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "requires_sponsorship": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "work_authorization": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "title": "Logistics",
+      "type": "object"
+    },
+    "OverallScore": {
+      "additionalProperties": false,
+      "properties": {
+        "band": {
+          "$ref": "#/$defs/ScoreBand"
+        },
+        "confidence": {
+          "maximum": 1,
+          "minimum": 0,
+          "type": "number"
+        },
+        "score": {
+          "maximum": 100,
+          "minimum": 0,
+          "type": "number"
+        }
+      },
+      "required": [
+        "score",
+        "band",
+        "confidence"
+      ],
+      "title": "OverallScore",
+      "type": "object"
+    },
+    "ProfileSource": {
+      "additionalProperties": false,
+      "properties": {
+        "file_name": {
+          "type": "string"
+        },
+        "file_type": {
+          "description": "Extension or MIME type, e.g. 'pdf'.",
+          "type": "string"
+        },
+        "parsed_at": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "text_sha256": {
+          "anyOf": [
+            {
+              "pattern": "^[a-f0-9]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Hash of the extracted text, so evidence can be verified against the exact document that produced it."
+        }
+      },
+      "required": [
+        "file_name",
+        "file_type",
+        "parsed_at"
+      ],
+      "title": "ProfileSource",
+      "type": "object"
+    },
+    "Requirement": {
+      "additionalProperties": false,
+      "description": "One scoreable expectation of the role.\n\n`id` is the join key: `ScoreWithEvidence.requirement_results` references it,\nso it must be stable for the life of the job description.",
+      "properties": {
+        "id": {
+          "description": "Stable slug, e.g. 'req_python_5y'.",
+          "pattern": "^req_[a-z0-9_]+$",
+          "type": "string"
+        },
+        "importance": {
+          "$ref": "#/$defs/Importance"
+        },
+        "kind": {
+          "$ref": "#/$defs/RequirementKind"
+        },
+        "label": {
+          "description": "Human-readable requirement, e.g. 'Python, 5+ years'.",
+          "type": "string"
+        },
+        "min_years": {
+          "anyOf": [
+            {
+              "maximum": 60,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "weight": {
+          "description": "Relative importance within the role. The ranker consumes this; the architect proposes it.",
+          "maximum": 1,
+          "minimum": 0,
+          "type": "number"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "label",
+        "importance",
+        "weight"
+      ],
+      "title": "Requirement",
+      "type": "object"
+    },
+    "RequirementKind": {
+      "enum": [
+        "skill",
+        "experience",
+        "education",
+        "certification",
+        "language",
+        "logistics"
+      ],
+      "title": "RequirementKind",
+      "type": "string"
+    },
+    "RequirementOutcome": {
+      "enum": [
+        "yes",
+        "partial",
+        "no",
+        "unknown"
+      ],
+      "title": "RequirementOutcome",
+      "type": "string"
+    },
+    "RequirementResult": {
+      "additionalProperties": false,
+      "properties": {
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "type": "array"
+        },
+        "met": {
+          "$ref": "#/$defs/RequirementOutcome"
+        },
+        "requirement_id": {
+          "description": "References JobDescription.requirements[].id.",
+          "pattern": "^req_[a-z0-9_]+$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "requirement_id",
+        "met"
+      ],
+      "title": "RequirementResult",
+      "type": "object"
+    },
+    "ScoreBand": {
+      "enum": [
+        "strong",
+        "good",
+        "fair",
+        "weak"
+      ],
+      "title": "ScoreBand",
+      "type": "string"
+    },
+    "ScoreDimension": {
+      "enum": [
+        "skills",
+        "experience",
+        "education",
+        "logistics"
+      ],
+      "title": "ScoreDimension",
+      "type": "string"
+    },
+    "ScoreMeta": {
+      "additionalProperties": false,
+      "properties": {
+        "latency_ms": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "model": {
+          "type": "string"
+        },
+        "prompt_version": {
+          "type": "string"
+        },
+        "scored_at": {
+          "format": "date-time",
+          "type": "string"
+        }
+      },
+      "required": [
+        "model",
+        "prompt_version",
+        "scored_at"
+      ],
+      "title": "ScoreMeta",
+      "type": "object"
+    },
+    "ScoreWithEvidence": {
+      "additionalProperties": false,
+      "description": "A candidate scored against a job, with citations for every claim.\n\nOutput of the ranker. Every element of `requirement_results` should point at\na requirement that exists on the job description being scored against.",
+      "properties": {
+        "candidate_id": {
+          "type": "string"
+        },
+        "dimensions": {
+          "items": {
+            "$ref": "#/$defs/DimensionScore"
+          },
+          "type": "array"
+        },
+        "gaps": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "job_id": {
+          "type": "string"
+        },
+        "meta": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ScoreMeta"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "overall": {
+          "$ref": "#/$defs/OverallScore"
+        },
+        "requirement_results": {
+          "items": {
+            "$ref": "#/$defs/RequirementResult"
+          },
+          "type": "array"
+        },
+        "risks": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "schema_version": {
+          "default": "1.0",
+          "type": "string"
+        },
+        "strengths": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "summary": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "job_id",
+        "candidate_id",
+        "overall",
+        "summary"
+      ],
+      "title": "ScoreWithEvidence",
+      "type": "object"
+    },
+    "Seniority": {
+      "enum": [
+        "intern",
+        "junior",
+        "mid",
+        "senior",
+        "staff",
+        "principal",
+        "lead",
+        "director",
+        "exec"
+      ],
+      "title": "Seniority",
+      "type": "string"
+    },
+    "Skill": {
+      "additionalProperties": false,
+      "properties": {
+        "category": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "last_used": {
+          "anyOf": [
+            {
+              "pattern": "^\\d{4}-(0[1-9]|1[0-2])$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "name": {
+          "type": "string"
+        },
+        "years": {
+          "anyOf": [
+            {
+              "maximum": 60,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "Skill",
+      "type": "object"
+    },
+    "WorkExperience": {
+      "additionalProperties": false,
+      "properties": {
+        "company": {
+          "type": "string"
+        },
+        "end": {
+          "anyOf": [
+            {
+              "pattern": "^\\d{4}-(0[1-9]|1[0-2])$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "highlights": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "is_current": {
+          "default": false,
+          "type": "boolean"
+        },
+        "location": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "skills": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "start": {
+          "anyOf": [
+            {
+              "pattern": "^\\d{4}-(0[1-9]|1[0-2])$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "title": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "company",
+        "title"
+      ],
+      "title": "WorkExperience",
+      "type": "object"
+    },
+    "WorkMode": {
+      "enum": [
+        "onsite",
+        "hybrid",
+        "remote"
+      ],
+      "title": "WorkMode",
+      "type": "string"
+    }
+  },
+  "$id": "https://orange.dev/contracts/orange.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "Codegen bundle. Read the per-contract schemas instead.",
+  "properties": {
+    "candidate_profile": {
+      "$ref": "#/$defs/CandidateProfile"
+    },
+    "job_description": {
+      "$ref": "#/$defs/JobDescription"
+    },
+    "score_with_evidence": {
+      "$ref": "#/$defs/ScoreWithEvidence"
+    }
+  },
+  "required": [
+    "job_description",
+    "candidate_profile",
+    "score_with_evidence"
+  ],
+  "title": "OrangeContracts",
+  "type": "object"
+}

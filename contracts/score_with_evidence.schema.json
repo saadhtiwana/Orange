@@ -1,0 +1,324 @@
+{
+  "$defs": {
+    "DimensionScore": {
+      "additionalProperties": false,
+      "properties": {
+        "dimension": {
+          "$ref": "#/$defs/ScoreDimension"
+        },
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "rationale": {
+          "title": "Rationale",
+          "type": "string"
+        },
+        "score": {
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Score",
+          "type": "number"
+        },
+        "weight": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Weight",
+          "type": "number"
+        }
+      },
+      "required": [
+        "dimension",
+        "score",
+        "weight",
+        "rationale"
+      ],
+      "title": "DimensionScore",
+      "type": "object"
+    },
+    "Evidence": {
+      "additionalProperties": false,
+      "description": "A verbatim citation backing (or undercutting) a scoring claim.",
+      "properties": {
+        "char_span": {
+          "anyOf": [
+            {
+              "maxItems": 2,
+              "minItems": 2,
+              "prefixItems": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "integer"
+                }
+              ],
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optional [start, end) offsets into raw_text.",
+          "title": "Char Span"
+        },
+        "confidence": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "locator": {
+          "description": "Where the quote came from, e.g. 'work_experience[1].highlights[0]' or 'raw_text'.",
+          "title": "Locator",
+          "type": "string"
+        },
+        "polarity": {
+          "$ref": "#/$defs/EvidencePolarity",
+          "default": "supports"
+        },
+        "quote": {
+          "description": "Copied verbatim from the CV. Must appear in CandidateProfile.raw_text.",
+          "title": "Quote",
+          "type": "string"
+        },
+        "requirement_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Requirement this citation speaks to, if any.",
+          "title": "Requirement Id"
+        }
+      },
+      "required": [
+        "quote",
+        "locator",
+        "confidence"
+      ],
+      "title": "Evidence",
+      "type": "object"
+    },
+    "EvidencePolarity": {
+      "description": "Whether a quote backs a claim, undercuts it, or is a noted absence.\n\n`absent` exists so the model can record \"the CV never mentions Kubernetes\"\nas a first-class finding instead of staying silent about a gap.",
+      "enum": [
+        "supports",
+        "contradicts",
+        "absent"
+      ],
+      "title": "EvidencePolarity",
+      "type": "string"
+    },
+    "OverallScore": {
+      "additionalProperties": false,
+      "properties": {
+        "band": {
+          "$ref": "#/$defs/ScoreBand"
+        },
+        "confidence": {
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Confidence",
+          "type": "number"
+        },
+        "score": {
+          "maximum": 100,
+          "minimum": 0,
+          "title": "Score",
+          "type": "number"
+        }
+      },
+      "required": [
+        "score",
+        "band",
+        "confidence"
+      ],
+      "title": "OverallScore",
+      "type": "object"
+    },
+    "RequirementOutcome": {
+      "enum": [
+        "yes",
+        "partial",
+        "no",
+        "unknown"
+      ],
+      "title": "RequirementOutcome",
+      "type": "string"
+    },
+    "RequirementResult": {
+      "additionalProperties": false,
+      "properties": {
+        "evidence": {
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "title": "Evidence",
+          "type": "array"
+        },
+        "met": {
+          "$ref": "#/$defs/RequirementOutcome"
+        },
+        "requirement_id": {
+          "description": "References JobDescription.requirements[].id.",
+          "pattern": "^req_[a-z0-9_]+$",
+          "title": "Requirement Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "requirement_id",
+        "met"
+      ],
+      "title": "RequirementResult",
+      "type": "object"
+    },
+    "ScoreBand": {
+      "enum": [
+        "strong",
+        "good",
+        "fair",
+        "weak"
+      ],
+      "title": "ScoreBand",
+      "type": "string"
+    },
+    "ScoreDimension": {
+      "enum": [
+        "skills",
+        "experience",
+        "education",
+        "logistics"
+      ],
+      "title": "ScoreDimension",
+      "type": "string"
+    },
+    "ScoreMeta": {
+      "additionalProperties": false,
+      "properties": {
+        "latency_ms": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Latency Ms"
+        },
+        "model": {
+          "title": "Model",
+          "type": "string"
+        },
+        "prompt_version": {
+          "title": "Prompt Version",
+          "type": "string"
+        },
+        "scored_at": {
+          "format": "date-time",
+          "title": "Scored At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "model",
+        "prompt_version",
+        "scored_at"
+      ],
+      "title": "ScoreMeta",
+      "type": "object"
+    }
+  },
+  "$id": "https://orange.dev/contracts/score_with_evidence.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "A candidate scored against a job, with citations for every claim.\n\nOutput of the ranker. Every element of `requirement_results` should point at\na requirement that exists on the job description being scored against.",
+  "properties": {
+    "candidate_id": {
+      "title": "Candidate Id",
+      "type": "string"
+    },
+    "dimensions": {
+      "items": {
+        "$ref": "#/$defs/DimensionScore"
+      },
+      "title": "Dimensions",
+      "type": "array"
+    },
+    "gaps": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Gaps",
+      "type": "array"
+    },
+    "job_id": {
+      "title": "Job Id",
+      "type": "string"
+    },
+    "meta": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ScoreMeta"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "overall": {
+      "$ref": "#/$defs/OverallScore"
+    },
+    "requirement_results": {
+      "items": {
+        "$ref": "#/$defs/RequirementResult"
+      },
+      "title": "Requirement Results",
+      "type": "array"
+    },
+    "risks": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Risks",
+      "type": "array"
+    },
+    "schema_version": {
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "strengths": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Strengths",
+      "type": "array"
+    },
+    "summary": {
+      "title": "Summary",
+      "type": "string"
+    }
+  },
+  "required": [
+    "job_id",
+    "candidate_id",
+    "overall",
+    "summary"
+  ],
+  "title": "ScoreWithEvidence",
+  "type": "object"
+}
