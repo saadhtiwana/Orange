@@ -11,3 +11,33 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+
+/// A role produced by the Job Architect.
+///
+/// `document` holds the full contract-conforming JobDescription exactly as the
+/// AI service returned it — that is the source of truth, and `requirements`
+/// lives inside it. The scalar columns above it are denormalised copies kept
+/// only so the pipeline can list and filter jobs without opening the JSON.
+///
+/// Owned by the Job Intelligence vertical. Candidate, profile, and score
+/// tables belong to other engineers; do not add them here.
+model Job {
+  id             String   @id @default(uuid())
+  title          String
+  seniority      String
+  employmentType String   @map("employment_type")
+  workMode       String   @map("work_mode")
+  locations      String[]
+  summary        String
+
+  document      Json
+  schemaVersion String  @map("schema_version")
+  model         String?
+  promptVersion String? @map("prompt_version")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([createdAt])
+  @@map("jobs")
+}

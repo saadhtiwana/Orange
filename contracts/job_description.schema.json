@@ -1,0 +1,408 @@
+{
+  "$defs": {
+    "Compensation": {
+      "additionalProperties": false,
+      "properties": {
+        "currency": {
+          "description": "ISO 4217 code, e.g. 'EUR'.",
+          "pattern": "^[A-Z]{3}$",
+          "title": "Currency",
+          "type": "string"
+        },
+        "max": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Max"
+        },
+        "min": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Min"
+        },
+        "period": {
+          "$ref": "#/$defs/CompensationPeriod",
+          "default": "year"
+        }
+      },
+      "required": [
+        "currency"
+      ],
+      "title": "Compensation",
+      "type": "object"
+    },
+    "CompensationPeriod": {
+      "enum": [
+        "hour",
+        "month",
+        "year"
+      ],
+      "title": "CompensationPeriod",
+      "type": "string"
+    },
+    "DegreeLevel": {
+      "enum": [
+        "none",
+        "high_school",
+        "associate",
+        "bachelor",
+        "master",
+        "doctorate"
+      ],
+      "title": "DegreeLevel",
+      "type": "string"
+    },
+    "EducationRequirement": {
+      "additionalProperties": false,
+      "properties": {
+        "fields": {
+          "description": "Acceptable fields of study.",
+          "items": {
+            "type": "string"
+          },
+          "title": "Fields",
+          "type": "array"
+        },
+        "minimum_level": {
+          "$ref": "#/$defs/DegreeLevel",
+          "default": "none"
+        }
+      },
+      "title": "EducationRequirement",
+      "type": "object"
+    },
+    "EmploymentType": {
+      "enum": [
+        "full_time",
+        "part_time",
+        "contract",
+        "internship",
+        "temporary"
+      ],
+      "title": "EmploymentType",
+      "type": "string"
+    },
+    "ExperienceRange": {
+      "additionalProperties": false,
+      "properties": {
+        "max": {
+          "anyOf": [
+            {
+              "maximum": 60,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Max"
+        },
+        "min": {
+          "anyOf": [
+            {
+              "maximum": 60,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Min"
+        }
+      },
+      "title": "ExperienceRange",
+      "type": "object"
+    },
+    "GenerationMeta": {
+      "additionalProperties": false,
+      "properties": {
+        "generated_at": {
+          "format": "date-time",
+          "title": "Generated At",
+          "type": "string"
+        },
+        "model": {
+          "description": "Model id that produced this document.",
+          "title": "Model",
+          "type": "string"
+        },
+        "prompt_version": {
+          "title": "Prompt Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "model",
+        "prompt_version",
+        "generated_at"
+      ],
+      "title": "GenerationMeta",
+      "type": "object"
+    },
+    "Importance": {
+      "enum": [
+        "must_have",
+        "nice_to_have"
+      ],
+      "title": "Importance",
+      "type": "string"
+    },
+    "LanguageProficiency": {
+      "enum": [
+        "basic",
+        "conversational",
+        "professional",
+        "native"
+      ],
+      "title": "LanguageProficiency",
+      "type": "string"
+    },
+    "LanguageSkill": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "description": "Language name, e.g. 'German'.",
+          "title": "Name",
+          "type": "string"
+        },
+        "proficiency": {
+          "$ref": "#/$defs/LanguageProficiency"
+        }
+      },
+      "required": [
+        "name",
+        "proficiency"
+      ],
+      "title": "LanguageSkill",
+      "type": "object"
+    },
+    "Requirement": {
+      "additionalProperties": false,
+      "description": "One scoreable expectation of the role.\n\n`id` is the join key: `ScoreWithEvidence.requirement_results` references it,\nso it must be stable for the life of the job description.",
+      "properties": {
+        "id": {
+          "description": "Stable slug, e.g. 'req_python_5y'.",
+          "pattern": "^req_[a-z0-9_]+$",
+          "title": "Id",
+          "type": "string"
+        },
+        "importance": {
+          "$ref": "#/$defs/Importance"
+        },
+        "kind": {
+          "$ref": "#/$defs/RequirementKind"
+        },
+        "label": {
+          "description": "Human-readable requirement, e.g. 'Python, 5+ years'.",
+          "title": "Label",
+          "type": "string"
+        },
+        "min_years": {
+          "anyOf": [
+            {
+              "maximum": 60,
+              "minimum": 0,
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Min Years"
+        },
+        "weight": {
+          "description": "Relative importance within the role. The ranker consumes this; the architect proposes it.",
+          "maximum": 1,
+          "minimum": 0,
+          "title": "Weight",
+          "type": "number"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "label",
+        "importance",
+        "weight"
+      ],
+      "title": "Requirement",
+      "type": "object"
+    },
+    "RequirementKind": {
+      "enum": [
+        "skill",
+        "experience",
+        "education",
+        "certification",
+        "language",
+        "logistics"
+      ],
+      "title": "RequirementKind",
+      "type": "string"
+    },
+    "Seniority": {
+      "enum": [
+        "intern",
+        "junior",
+        "mid",
+        "senior",
+        "staff",
+        "principal",
+        "lead",
+        "director",
+        "exec"
+      ],
+      "title": "Seniority",
+      "type": "string"
+    },
+    "WorkMode": {
+      "enum": [
+        "onsite",
+        "hybrid",
+        "remote"
+      ],
+      "title": "WorkMode",
+      "type": "string"
+    }
+  },
+  "$id": "https://orange.dev/contracts/job_description.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "description": "A structured role definition. Output of the Job Architect.",
+  "properties": {
+    "benefits": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Benefits",
+      "type": "array"
+    },
+    "compensation": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Compensation"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "education": {
+      "$ref": "#/$defs/EducationRequirement"
+    },
+    "employment_type": {
+      "$ref": "#/$defs/EmploymentType"
+    },
+    "experience_years": {
+      "$ref": "#/$defs/ExperienceRange"
+    },
+    "id": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Set by the persistence layer, not the model.",
+      "title": "Id"
+    },
+    "keywords": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Keywords",
+      "type": "array"
+    },
+    "languages": {
+      "items": {
+        "$ref": "#/$defs/LanguageSkill"
+      },
+      "title": "Languages",
+      "type": "array"
+    },
+    "locations": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Locations",
+      "type": "array"
+    },
+    "meta": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/GenerationMeta"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "requirements": {
+      "items": {
+        "$ref": "#/$defs/Requirement"
+      },
+      "title": "Requirements",
+      "type": "array"
+    },
+    "responsibilities": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Responsibilities",
+      "type": "array"
+    },
+    "schema_version": {
+      "default": "1.0",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "seniority": {
+      "$ref": "#/$defs/Seniority"
+    },
+    "summary": {
+      "title": "Summary",
+      "type": "string"
+    },
+    "title": {
+      "title": "Title",
+      "type": "string"
+    },
+    "work_mode": {
+      "$ref": "#/$defs/WorkMode"
+    }
+  },
+  "required": [
+    "title",
+    "seniority",
+    "employment_type",
+    "work_mode",
+    "summary"
+  ],
+  "title": "JobDescription",
+  "type": "object"
+}

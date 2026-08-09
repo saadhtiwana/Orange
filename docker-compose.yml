@@ -1,0 +1,23 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg17
+    container_name: orange-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-orange}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-orange}
+      POSTGRES_DB: ${POSTGRES_DB:-orange}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - orange-pgdata:/var/lib/postgresql/data
+      # Runs once, on an empty data directory. Delete the volume to re-run it.
+      - ./db/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-orange} -d ${POSTGRES_DB:-orange}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  orange-pgdata:

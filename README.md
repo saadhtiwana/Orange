@@ -87,15 +87,63 @@ Lean now so it ships fast. Built to grow into a stack that scales.
 
 ## Run locally
 
-```bash
-git clone https://github.com/saahtiwana/orange.git
-cd orange
-cp .env.example .env        # add your LLM and database keys
+**Prerequisites:** Node 22+, [uv](https://docs.astral.sh/uv/), and Docker.
 
-docker compose up -d postgres              # database
-cd web && pnpm install && pnpm dev         # web  ->  localhost:3000
-cd ../ai && uv sync && uvicorn app.main:app --reload   # ai  ->  localhost:8000
+```bash
+git clone https://github.com/saadhtiwana/orange.git
+cd orange
+cp .env.example .env        # add your ANTHROPIC_API_KEY
 ```
+
+**1. Database** — Postgres with `pgvector`, on port 5432:
+
+```bash
+docker compose up -d postgres
+```
+
+**2. AI service** — FastAPI on `localhost:8000`:
+
+```bash
+cd ai
+cp ../.env.example .env     # needs ANTHROPIC_API_KEY
+uv sync
+uv run uvicorn app.main:app --reload
+```
+
+Check it: `curl localhost:8000/health`
+
+**3. Web app** — Next.js on `localhost:3000`:
+
+```bash
+cd web
+cp ../.env.example .env     # needs DATABASE_URL and AI_SERVICE_URL
+npm install
+npx prisma migrate deploy   # create the tables
+npm run dev
+```
+
+Open [localhost:3000](http://localhost:3000) — it lands on the Job Architect. Describe a role and you get a structured job description back, saved to Postgres.
+
+### Working on it
+
+```bash
+# web/
+npm run lint && npm run format:check && npm run typecheck && npm test && npm run build
+
+# ai/
+uv run ruff check . && uv run ruff format --check . && uv run mypy app scripts && uv run pytest
+```
+
+CI runs exactly these on every push and PR. Tests mock the LLM, so they need no API key and cost nothing.
+
+After changing a contract in `ai/app/contracts/models.py`, regenerate the artifacts:
+
+```bash
+cd ai  && uv run python scripts/export_schemas.py
+cd web && npm run gen:contracts
+```
+
+See [docs/contracts.md](docs/contracts.md) for what the contracts are and [CONTRIBUTING.md](CONTRIBUTING.md) for the branch and commit conventions.
 
 ## Team
 

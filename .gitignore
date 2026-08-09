@@ -1,0 +1,60 @@
+# dependencies
+node_modules/
+.pnp
+.pnp.*
+
+# next.js
+.next/
+out/
+build/
+next-env.d.ts
+*.tsbuildinfo
+
+# prisma generated client
+web/app/generated/
+
+# python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+dist/
+
+# env files
+.env
+.env.*
+!.env.example
+
+# testing
+coverage/
+.coverage
+htmlcov/
+
+# docker volumes
+db/data/
+
+# editors and OS
+.DS_Store
+*.pem
+.idea/
+.vscode/
+
+# AI tool config
+.claude/
+.agents/
+.windsurf/
+.cursor/
+
+# logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# vercel
+.vercel
