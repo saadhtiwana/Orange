@@ -113,6 +113,18 @@ The output of the ranker.
 - `requirement_results[]` — per-requirement outcome (`yes` / `partial` / `no` / `unknown`) with evidence.
 - `strengths`, `gaps`, `risks` — short summaries for the shortlist view.
 
+## Known constraints the ranker must handle
+
+Four things the schema deliberately does **not** enforce. They are not bugs; they are limits of what a single-model schema can express, and the ranker owns them.
+
+**Requirement weights are not enforced to sum to 1.** The Job Architect prompt asks for weights that sum to roughly 1, and nothing validates that they do. A job description whose weights sum to 3 is schema-valid. **Normalise defensively before scoring** — otherwise one over-weighted job description silently skews its candidates' scores relative to every other job.
+
+**`requirement_id` integrity is the ranker's responsibility.** `ScoreWithEvidence.requirement_results[].requirement_id` matches the `req_*` pattern, but no schema can check that the id actually exists on the job description being scored against — the two are separate documents. Validate the join yourself and treat an unmatched id as a bug in the scoring step, not as a candidate signal.
+
+**`quote` may be empty.** Only `polarity: absent` should carry an empty quote — that is the "the CV never mentions Kubernetes" case. A `supports` or `contradicts` claim with an empty quote is a citation that cites nothing, and it is schema-valid today. Reject it at scoring time.
+
+**Quote verifiability is not guaranteed.** `CandidateProfile.raw_text` is optional. When it is `null` there is nothing to verify a quote against, so the audit trail is only as good as the model that produced it. Treat evidence on a profile without `raw_text` as unverified, and prefer to keep `raw_text` populated wherever storage allows.
+
 ## Strictness
 
 Every contract model sets `extra="forbid"`. This is load-bearing, not stylistic: these models parse LLM output, and forbidding unknown keys turns a hallucinated field into a loud validation error instead of silently dropped data.
