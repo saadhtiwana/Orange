@@ -18,10 +18,7 @@ const MAX_FILE_BYTES = 10 * 1024 * 1024; // 10MB
 
 const ALLOWED_MIME_TYPES = new Map<string, string>([
   ["application/pdf", ".pdf"],
-  [
-    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-    ".docx",
-  ],
+  ["application/vnd.openxmlformats-officedocument.wordprocessingml.document", ".docx"],
 ]);
 
 // TODO: move file storage to S3 / Vercel Blob — local /uploads is prototype-only.
@@ -32,10 +29,7 @@ export async function POST(request: Request) {
   try {
     formData = await request.formData();
   } catch {
-    return NextResponse.json(
-      { error: "Request must be multipart/form-data." },
-      { status: 400 },
-    );
+    return NextResponse.json({ error: "Request must be multipart/form-data." }, { status: 400 });
   }
 
   const file = formData.get("file");
@@ -51,10 +45,7 @@ export async function POST(request: Request) {
   }
 
   if (file.size > MAX_FILE_BYTES) {
-    return NextResponse.json(
-      { error: "File too large. Maximum size is 10MB." },
-      { status: 400 },
-    );
+    return NextResponse.json({ error: "File too large. Maximum size is 10MB." }, { status: 400 });
   }
 
   const extension = ALLOWED_MIME_TYPES.get(file.type);
@@ -80,10 +71,7 @@ export async function POST(request: Request) {
     await writeFile(absolutePath, bytes);
   } catch (error) {
     console.error("Failed to store uploaded file", error);
-    return NextResponse.json(
-      { error: "Could not store the uploaded file." },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "Could not store the uploaded file." }, { status: 500 });
   }
 
   try {

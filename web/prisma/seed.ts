@@ -41,8 +41,7 @@ const candidates: SeedCandidate[] = [
     phone: "+92-300-1112233",
     source: "linkedin",
     resumeUrl: "seed://resumes/ayesha-khan.pdf",
-    rawText:
-      "Ayesha Khan — Senior Software Engineer, Lahore. 6 years React/TypeScript/Node.",
+    rawText: "Ayesha Khan — Senior Software Engineer, Lahore. 6 years React/TypeScript/Node.",
     parsedJson: {
       skills: ["TypeScript", "React", "Next.js", "Node.js", "PostgreSQL", "AWS"],
       experience: [
@@ -77,8 +76,7 @@ const candidates: SeedCandidate[] = [
     phone: "+92-321-4455667",
     source: "referral",
     resumeUrl: "seed://resumes/bilal-ahmed.pdf",
-    rawText:
-      "Bilal Ahmed — Mid-level Backend Engineer, Islamabad. Python, FastAPI, Django.",
+    rawText: "Bilal Ahmed — Mid-level Backend Engineer, Islamabad. Python, FastAPI, Django.",
     parsedJson: {
       skills: ["Python", "FastAPI", "Django", "PostgreSQL", "Redis", "Docker"],
       experience: [
@@ -113,8 +111,7 @@ const candidates: SeedCandidate[] = [
     phone: "+92-333-7788990",
     source: "inbound",
     resumeUrl: "seed://resumes/hassan-raza.pdf",
-    rawText:
-      "Hassan Raza — Junior Full-Stack Developer, Karachi. Fresh grad + 1 year internship.",
+    rawText: "Hassan Raza — Junior Full-Stack Developer, Karachi. Fresh grad + 1 year internship.",
     parsedJson: {
       skills: ["JavaScript", "React", "Express", "MongoDB", "Git"],
       experience: [
@@ -143,17 +140,9 @@ const candidates: SeedCandidate[] = [
     phone: "+92-345-1122334",
     source: "linkedin",
     resumeUrl: "seed://resumes/fatima-siddiqui.pdf",
-    rawText:
-      "Fatima Siddiqui — Staff Engineer / Tech Lead, Lahore. Distributed systems.",
+    rawText: "Fatima Siddiqui — Staff Engineer / Tech Lead, Lahore. Distributed systems.",
     parsedJson: {
-      skills: [
-        "Go",
-        "Kubernetes",
-        "gRPC",
-        "PostgreSQL",
-        "System Design",
-        "TypeScript",
-      ],
+      skills: ["Go", "Kubernetes", "gRPC", "PostgreSQL", "System Design", "TypeScript"],
       experience: [
         {
           company: "Bykea",
@@ -192,8 +181,7 @@ const candidates: SeedCandidate[] = [
     phone: "+92-312-5566778",
     source: "job_board",
     resumeUrl: "seed://resumes/usman-ali.pdf",
-    rawText:
-      "Usman Ali — Mobile Engineer, Faisalabad. React Native and Flutter.",
+    rawText: "Usman Ali — Mobile Engineer, Faisalabad. React Native and Flutter.",
     parsedJson: {
       skills: ["React Native", "Flutter", "Dart", "TypeScript", "Firebase"],
       experience: [
@@ -228,8 +216,7 @@ const candidates: SeedCandidate[] = [
     phone: "+92-301-9988776",
     source: "linkedin",
     resumeUrl: "seed://resumes/sana-malik.pdf",
-    rawText:
-      "Sana Malik — DevOps Engineer, Rawalpindi. CI/CD, AWS, Terraform.",
+    rawText: "Sana Malik — DevOps Engineer, Rawalpindi. CI/CD, AWS, Terraform.",
     parsedJson: {
       skills: ["AWS", "Terraform", "Kubernetes", "CI/CD", "Docker", "Python"],
       experience: [
@@ -264,8 +251,7 @@ const candidates: SeedCandidate[] = [
     phone: "+92-334-2233445",
     source: "referral",
     resumeUrl: "seed://resumes/omar-farooq.pdf",
-    rawText:
-      "Omar Farooq — Junior Frontend Developer, Peshawar. React + Tailwind.",
+    rawText: "Omar Farooq — Junior Frontend Developer, Peshawar. React + Tailwind.",
     parsedJson: {
       skills: ["HTML", "CSS", "JavaScript", "React", "Tailwind CSS"],
       experience: [
@@ -294,8 +280,7 @@ const candidates: SeedCandidate[] = [
     phone: "+92-315-6677889",
     source: "inbound",
     resumeUrl: "seed://resumes/zainab-hussain.pdf",
-    rawText:
-      "Zainab Hussain — Data / ML Engineer, Karachi. Python, NLP, LLM apps.",
+    rawText: "Zainab Hussain — Data / ML Engineer, Karachi. Python, NLP, LLM apps.",
     parsedJson: {
       skills: ["Python", "PyTorch", "NLP", "LLMs", "FastAPI", "SQL"],
       experience: [
@@ -330,17 +315,9 @@ const candidates: SeedCandidate[] = [
     phone: "+92-302-3344556",
     source: "linkedin",
     resumeUrl: "seed://resumes/maria-iqbal.pdf",
-    rawText:
-      "Maria Iqbal — Growth Marketing Manager, Lahore. B2B SaaS demand gen.",
+    rawText: "Maria Iqbal — Growth Marketing Manager, Lahore. B2B SaaS demand gen.",
     parsedJson: {
-      skills: [
-        "SEO",
-        "Google Ads",
-        "HubSpot",
-        "Content Strategy",
-        "Analytics",
-        "A/B Testing",
-      ],
+      skills: ["SEO", "Google Ads", "HubSpot", "Content Strategy", "Analytics", "A/B Testing"],
       experience: [
         {
           company: "Retailo",
@@ -373,8 +350,7 @@ const candidates: SeedCandidate[] = [
     phone: "+92-323-8899001",
     source: "job_board",
     resumeUrl: "seed://resumes/ali-mir.pdf",
-    rawText:
-      "Ali Raza Mir — Brand Marketing Lead, Islamabad. Campaigns + creative ops.",
+    rawText: "Ali Raza Mir — Brand Marketing Lead, Islamabad. Campaigns + creative ops.",
     parsedJson: {
       skills: [
         "Brand Strategy",
@@ -416,16 +392,9 @@ const candidates: SeedCandidate[] = [
     phone: "+92-311-4455667",
     source: "referral",
     resumeUrl: "seed://resumes/hira-nadeem.pdf",
-    rawText:
-      "Hira Nadeem — Junior Marketing Associate, Multan. Content + community.",
+    rawText: "Hira Nadeem — Junior Marketing Associate, Multan. Content + community.",
     parsedJson: {
-      skills: [
-        "Content Writing",
-        "Instagram",
-        "Email Marketing",
-        "Canva",
-        "Google Analytics",
-      ],
+      skills: ["Content Writing", "Instagram", "Email Marketing", "Canva", "Google Analytics"],
       experience: [
         {
           company: "Local startup (ShopLocal)",
@@ -458,8 +427,7 @@ const candidates: SeedCandidate[] = [
     phone: "+92-300-7788990",
     source: "inbound",
     resumeUrl: "seed://resumes/kamran-shah.pdf",
-    rawText:
-      "Kamran Shah — Operations Manager, Karachi. Logistics + vendor ops.",
+    rawText: "Kamran Shah — Operations Manager, Karachi. Logistics + vendor ops.",
     parsedJson: {
       skills: [
         "Operations Management",
@@ -501,17 +469,9 @@ const candidates: SeedCandidate[] = [
     phone: "+92-333-5566778",
     source: "linkedin",
     resumeUrl: "seed://resumes/nida-asghar.pdf",
-    rawText:
-      "Nida Asghar — People Ops / Talent Coordinator, Lahore. ATS + campus hiring.",
+    rawText: "Nida Asghar — People Ops / Talent Coordinator, Lahore. ATS + campus hiring.",
     parsedJson: {
-      skills: [
-        "ATS",
-        "Recruiting Ops",
-        "Campus Hiring",
-        "Onboarding",
-        "Notion",
-        "Excel",
-      ],
+      skills: ["ATS", "Recruiting Ops", "Campus Hiring", "Onboarding", "Notion", "Excel"],
       experience: [
         {
           company: "Bazaar Technologies",
@@ -543,8 +503,7 @@ const candidates: SeedCandidate[] = [
     email: "taha.mehmood@email.com",
     source: "job_board",
     resumeUrl: "seed://resumes/taha-mehmood.pdf",
-    rawText:
-      "Taha Mehmood — Product Marketing Manager, Islamabad. PLG + launch narratives.",
+    rawText: "Taha Mehmood — Product Marketing Manager, Islamabad. PLG + launch narratives.",
     parsedJson: {
       skills: [
         "Product Marketing",
@@ -586,8 +545,7 @@ const candidates: SeedCandidate[] = [
     phone: "+92-321-9900112",
     source: "referral",
     resumeUrl: "seed://resumes/rabia-anwar.pdf",
-    rawText:
-      "Rabia Anwar — Business Operations Analyst, Gujranwala. RevOps + reporting.",
+    rawText: "Rabia Anwar — Business Operations Analyst, Gujranwala. RevOps + reporting.",
     parsedJson: {
       skills: [
         "RevOps",
