@@ -50,7 +50,10 @@ jobs:
           cache-dependency-path: web/package-lock.json
 
       - name: Install dependencies
-        run: npm ci
+        # Include optional native binaries (lightningcss / tailwind oxide) so
+        # Linux CI gets the linux-* packages even when the lockfile was
+        # primarily generated on Windows.
+        run: npm ci --include=optional
 
       - name: Generate Prisma client
         run: npx prisma generate
@@ -125,7 +128,7 @@ jobs:
       - name: Install dependencies
         run: |
           uv sync --locked --directory ai
-          npm ci --prefix web
+          npm ci --include=optional --prefix web
 
       - name: Regenerate contracts from the Pydantic source of truth
         run: |
