@@ -39,5 +39,9 @@
     "tsx": "^4.23.11",
     "typescript": "^5",
     "vitest": "^3.0.5"
+  },
+  "optionalDependencies": {
+    "lightningcss-linux-x64-gnu": "^1.32.0",
+    "lightningcss-linux-x64-musl": "^1.32.0"
   }
 }
