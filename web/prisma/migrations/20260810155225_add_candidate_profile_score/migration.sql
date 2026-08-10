@@ -1,17 +1,3 @@
--- CreateSchema
-CREATE SCHEMA IF NOT EXISTS "public";
-
--- CreateTable
-CREATE TABLE "Job" (
-    "id" TEXT NOT NULL,
-    "title" TEXT NOT NULL,
-    "descriptionJson" JSONB NOT NULL,
-    "status" TEXT NOT NULL DEFAULT 'draft',
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
-    CONSTRAINT "Job_pkey" PRIMARY KEY ("id")
-);
-
 -- CreateTable
 CREATE TABLE "Candidate" (
     "id" TEXT NOT NULL,
@@ -63,4 +49,4 @@ ALTER TABLE "Profile" ADD CONSTRAINT "Profile_candidateId_fkey" FOREIGN KEY ("ca
 ALTER TABLE "Score" ADD CONSTRAINT "Score_candidateId_fkey" FOREIGN KEY ("candidateId") REFERENCES "Candidate"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Score" ADD CONSTRAINT "Score_jobId_fkey" FOREIGN KEY ("jobId") REFERENCES "Job"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Score" ADD CONSTRAINT "Score_jobId_fkey" FOREIGN KEY ("jobId") REFERENCES "jobs"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
