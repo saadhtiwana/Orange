@@ -117,4 +117,4 @@ Tag the owner of any module your change touches. Changes to `contracts/` affect 
 | ------ | ----------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
 | Week 1 | Saad        | 📝 shared contracts · 🤖 AI service + Job Architect endpoint · 🔌 job chat wired · ⚙️ CI pipeline · 📦 Postgres+pgvector via Docker · 🏗️ repo guardrails ✅ |
 | Week 1 | Ahmad       | 🏗️ Next.js scaffold · 🗄️ Prisma setup ✅                                                                                                          |
-| Week 1 | Abdullah    | 🎨 design system + Kanban shell 🚧                                                                                                                |
+| Week 1 | Abdullah    | 🔌 mock pipeline API + fixtures · 🧪 tests ✅ · 🎨 design system + Kanban shell 🚧                                                                    |
