@@ -42,6 +42,9 @@ CREATE INDEX "Profile_candidateId_idx" ON "Profile"("candidateId");
 -- CreateIndex
 CREATE INDEX "Score_candidateId_idx" ON "Score"("candidateId");
 
+-- CreateIndex
+CREATE INDEX "Score_jobId_idx" ON "Score"("jobId");
+
 -- AddForeignKey
 ALTER TABLE "Profile" ADD CONSTRAINT "Profile_candidateId_fkey" FOREIGN KEY ("candidateId") REFERENCES "Candidate"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 

@@ -5,7 +5,7 @@
  * placeholder Candidate + Profile rows. Parsing is Week 2 — rawText stays null.
  */
 import { randomUUID } from "node:crypto";
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 import { NextResponse } from "next/server";
@@ -94,6 +94,9 @@ export async function POST(request: Request) {
 
     const profile = candidate.profiles[0];
     if (!profile) {
+      await rm(absolutePath, { force: true }).catch((cleanupError) => {
+        console.error("Failed to clean up stored upload after missing profile", cleanupError);
+      });
       return NextResponse.json(
         { error: "Candidate was created but profile is missing." },
         { status: 500 },
@@ -106,6 +109,11 @@ export async function POST(request: Request) {
     });
   } catch (error) {
     console.error("Failed to persist upload candidate/profile", error);
+    try {
+      await rm(absolutePath, { force: true });
+    } catch (cleanupError) {
+      console.error("Failed to clean up stored upload after DB error", cleanupError);
+    }
     return NextResponse.json(
       {
         error:

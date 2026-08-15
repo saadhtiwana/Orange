@@ -18,8 +18,13 @@ function resolveConnectionString(url: string): string {
   return decoded.databaseUrl;
 }
 
+const databaseUrl = process.env.DATABASE_URL;
+if (!databaseUrl) {
+  throw new Error("DATABASE_URL is not set. Copy .env.example to .env.");
+}
+
 const adapter = new PrismaPg({
-  connectionString: resolveConnectionString(process.env.DATABASE_URL!),
+  connectionString: resolveConnectionString(databaseUrl),
 });
 const prisma = new PrismaClient({ adapter });
 
