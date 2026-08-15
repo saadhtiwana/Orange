@@ -58,3 +58,6 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+# local CV uploads (Week 1 prototype storage)
+web/uploads/
