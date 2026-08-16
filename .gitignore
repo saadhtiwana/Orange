@@ -58,3 +58,6 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+# personal weekly learning notes (Abdullah)
+learning/
