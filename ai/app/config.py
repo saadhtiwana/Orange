@@ -23,9 +23,18 @@ class Settings(BaseSettings):
     # The service starts without a key so /health and the test suite work
     # offline; only the endpoints that actually call an LLM require one.
     anthropic_api_key: str | None = None
+    xai_api_key: str | None = None
+    gemini_api_key: str | None = None
+    openrouter_api_key: str | None = None
 
-    llm_provider: str = "anthropic"
-    llm_model: str = "claude-opus-5"
+    # xAI, Gemini and OpenRouter all speak the OpenAI wire format, so they share
+    # one client and differ only in where it points.
+    xai_base_url: str = "https://api.x.ai/v1"
+    gemini_base_url: str = "https://generativelanguage.googleapis.com/v1beta/openai/"
+    openrouter_base_url: str = "https://openrouter.ai/api/v1"
+
+    llm_provider: str = "grok"
+    llm_model: str = "grok-4"
     # Generous, because on this model max_tokens caps thinking *and* the
     # response together — a tight budget truncates the JD mid-object.
     llm_max_tokens: int = 16000
