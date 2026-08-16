@@ -52,7 +52,7 @@ export function CandidateCard({
       role="button"
       tabIndex={0}
       aria-label={`${card.fullName}, ${scoreLabel}, ${card.stage}. Enter to open; left or right arrow to change stage.`}
-      className={`bg-card border-line hover:border-line-2 group cursor-grab rounded-[10px] border p-4 transition-[border-color,transform,opacity] hover:-translate-y-0.5 active:cursor-grabbing ${
+      className={`bg-card border-line hover:border-line-2 shadow-card hover:shadow-card-hover group cursor-grab rounded-lg border p-4 transition-[border-color,box-shadow,transform,opacity] duration-200 hover:-translate-y-0.5 active:cursor-grabbing ${
         rejected ? "opacity-55 hover:opacity-100" : ""
       } ${dragging ? "opacity-40" : ""}`}
     >
@@ -65,7 +65,7 @@ export function CandidateCard({
           <div className="mt-[14px] flex items-center">
             <BandBadge band={card.score.band} value={card.score.overall} />
             <span
-              className="text-ink-3 ml-auto font-mono text-[10px]"
+              className="text-ink-3 ml-auto font-mono text-[10px] tabular-nums"
               title={`confidence ${card.score.confidence}`}
             >
               {card.score.confidence.toFixed(2)}
