@@ -1,26 +1,189 @@
 @import "tailwindcss";
 
+/*
+ * Orange design tokens — the single source of truth the UI codes against.
+ * Ported from the "Orange Design Tokens" mockup. The raw palette lives in CSS
+ * variables so a `[data-theme="dark"]` override re-themes everything at once;
+ * the @theme inline block turns them into Tailwind utilities (bg-paper,
+ * text-ink, border-line, text-signal, the score-band colors, font-mono…).
+ */
+
+/* Class/attribute dark mode: `dark:` variants key off data-theme. */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --o-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  --o-serif: var(--font-instrument-serif), Georgia, serif;
+  --o-mono: var(--font-plex-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --o-bg: #fbf7f2;
+  --o-card: #ffffff;
+  --o-ink: #171310;
+  --o-ink2: #5c544a;
+  --o-ink3: #9a8f80;
+  --o-line: #e9e1d6;
+  --o-line2: #c9beae;
+  --o-accent: #ea580c;
+  --o-accent-hover: #c2410c;
+
+  --o-sk1: #efe7dc;
+  --o-sk2: #f9f4ee;
+
+  --o-strong-t: #4a6b2a;
+  --o-strong-bg: #ebefdd;
+  --o-strong-bd: #cbd6ae;
+  --o-good-t: #2a6272;
+  --o-good-bg: #e2ecec;
+  --o-good-bd: #b8d2d4;
+  --o-fair-t: #8f6612;
+  --o-fair-bg: #f3ecd4;
+  --o-fair-bd: #decf9e;
+  --o-weak-t: #9c3d22;
+  --o-weak-bg: #f3e3da;
+  --o-weak-bd: #dfbca9;
+
+  --o-must-t: #9a3a0a;
+  --o-must-bg: #ffe0cc;
+  --o-must-bd: #f3c4a4;
+}
+
+[data-theme="dark"] {
+  --o-bg: #171310;
+  --o-card: #221c16;
+  --o-ink: #fbf7f2;
+  --o-ink2: #b3a99d;
+  --o-ink3: #7a7064;
+  --o-line: #2e2620;
+  --o-line2: #4e4438;
+  --o-accent: #ea580c;
+  --o-accent-hover: #f2600f;
+
+  --o-sk1: #2a231c;
+  --o-sk2: #1e1813;
+
+  --o-strong-t: #a9c87e;
+  --o-strong-bg: rgba(140, 170, 90, 0.1);
+  --o-strong-bd: rgba(140, 170, 90, 0.28);
+  --o-good-t: #7fb4c4;
+  --o-good-bg: rgba(90, 150, 170, 0.1);
+  --o-good-bd: rgba(90, 150, 170, 0.28);
+  --o-fair-t: #d9a93f;
+  --o-fair-bg: rgba(200, 160, 60, 0.1);
+  --o-fair-bd: rgba(200, 160, 60, 0.28);
+  --o-weak-t: #e08568;
+  --o-weak-bg: rgba(200, 90, 60, 0.1);
+  --o-weak-bd: rgba(200, 90, 60, 0.28);
+
+  --o-must-t: #f0a277;
+  --o-must-bg: rgba(234, 88, 12, 0.12);
+  --o-must-bd: rgba(234, 88, 12, 0.32);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--o-sans);
+  --font-serif: var(--o-serif);
+  --font-mono: var(--o-mono);
+
+  --color-paper: var(--o-bg);
+  --color-card: var(--o-card);
+  --color-ink: var(--o-ink);
+  --color-ink-2: var(--o-ink2);
+  --color-ink-3: var(--o-ink3);
+  --color-line: var(--o-line);
+  --color-line-2: var(--o-line2);
+  --color-signal: var(--o-accent);
+  --color-signal-hover: var(--o-accent-hover);
+
+  --color-strong-text: var(--o-strong-t);
+  --color-strong-bg: var(--o-strong-bg);
+  --color-strong-border: var(--o-strong-bd);
+  --color-good-text: var(--o-good-t);
+  --color-good-bg: var(--o-good-bg);
+  --color-good-border: var(--o-good-bd);
+  --color-fair-text: var(--o-fair-t);
+  --color-fair-bg: var(--o-fair-bg);
+  --color-fair-border: var(--o-fair-bd);
+  --color-weak-text: var(--o-weak-t);
+  --color-weak-bg: var(--o-weak-bg);
+  --color-weak-border: var(--o-weak-bd);
+
+  --color-must-text: var(--o-must-t);
+  --color-must-bg: var(--o-must-bg);
+  --color-must-border: var(--o-must-bd);
+
+  --animate-shimmer: o-shimmer 1.8s linear infinite;
+  --animate-pulse-dot: o-pulse 1.4s ease-in-out infinite;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@keyframes o-shimmer {
+  0% {
+    background-position: 120% 0;
+  }
+  100% {
+    background-position: -120% 0;
+  }
+}
+
+@keyframes o-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.25;
   }
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  background: var(--o-bg);
+  color: var(--o-ink);
+  font-family: var(--o-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: rgba(234, 88, 12, 0.18);
+}
+
+/* Shimmer placeholder — used while a candidate is still parsing/scoring. */
+.o-skeleton {
+  background: linear-gradient(90deg, var(--o-sk1) 25%, var(--o-sk2) 50%, var(--o-sk1) 75%);
+  background-size: 200% 100%;
+  animation: var(--animate-shimmer);
+}
+
+/* Keyboard focus — a single accent ring everywhere, for accessibility. */
+:focus-visible {
+  outline: 2px solid var(--o-accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Subtle entrance for page content. */
+@keyframes o-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.o-fade-in {
+  animation: o-fade-in 0.4s ease both;
+}
+
+/* Respect users who ask for less motion — disable animations/transitions. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

@@ -59,5 +59,7 @@ yarn-error.log*
 # vercel
 .vercel
 
+# personal weekly learning notes (Abdullah)
+learning/
 # local CV uploads (Week 1 prototype storage)
 web/uploads/
