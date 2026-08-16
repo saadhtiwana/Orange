@@ -19,8 +19,9 @@ datasource db {
 /// lives inside it. The scalar columns above it are denormalised copies kept
 /// only so the pipeline can list and filter jobs without opening the JSON.
 ///
-/// Owned by the Job Intelligence vertical. Candidate, profile, and score
-/// tables belong to other engineers; do not add them here.
+/// Job columns are owned by Job Intelligence. `Candidate`, `Profile`, and
+/// `Score` live in this same schema file under Ingestion & Profiles; `scores`
+/// is the back-relation the ranker uses to list scores for a job.
 model Job {
   id             String   @id @default(uuid())
   title          String
@@ -38,6 +39,48 @@ model Job {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
+  scores Score[]
+
   @@index([createdAt])
   @@map("jobs")
+}
+
+model Candidate {
+  id        String    @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  source    String
+  createdAt DateTime  @default(now())
+  profiles  Profile[]
+  scores    Score[]
+}
+
+// Week 2: add a pgvector embedding column here — not implemented yet.
+model Profile {
+  id             String    @id @default(cuid())
+  candidateId    String
+  candidate      Candidate @relation(fields: [candidateId], references: [id])
+  rawText        String?
+  parsedJson     Json?
+  confidenceJson Json?
+  resumeUrl      String
+  createdAt      DateTime  @default(now())
+
+  @@index([candidateId])
+}
+
+model Score {
+  id                  String    @id @default(cuid())
+  candidateId         String
+  candidate           Candidate @relation(fields: [candidateId], references: [id])
+  jobId               String
+  job                 Job       @relation(fields: [jobId], references: [id])
+  overallScore        Float
+  dimensionScoresJson Json
+  reasoningText       String
+  createdAt           DateTime  @default(now())
+
+  @@index([candidateId])
+  @@index([jobId])
 }

@@ -61,3 +61,5 @@ yarn-error.log*
 
 # personal weekly learning notes (Abdullah)
 learning/
+# local CV uploads (Week 1 prototype storage)
+web/uploads/
