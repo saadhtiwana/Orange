@@ -2,83 +2,201 @@
 
 /*
  * Orange design tokens — the single source of truth the UI codes against.
- * Ported from the "Orange Design Tokens" mockup. The raw palette lives in CSS
- * variables so a `[data-theme="dark"]` override re-themes everything at once;
- * the @theme inline block turns them into Tailwind utilities (bg-paper,
- * text-ink, border-line, text-signal, the score-band colors, font-mono…).
+ *
+ * Direction: clean enterprise infrastructure. Bright white canvas, a neutral
+ * greyscale ramp for every piece of text and every border, and ONE accent —
+ * orange — spent only on primary buttons, key numbers, active states and the
+ * logo. Reference aesthetic: securiti.ai's greyscale-plus-single-accent system,
+ * with orange substituted for their blue (#1ca8dd).
+ *
+ * Layering:
+ *   1. Raw palette      — literal values, the only place hexes are written.
+ *   2. Semantic aliases — what the UI actually names (--o-ink, --o-line…).
+ *   3. @theme inline    — turns semantics into Tailwind utilities.
+ *
+ * A `[data-theme="dark"]` override swaps the raw layer, so dark mode is a
+ * palette swap, not a second stylesheet.
+ *
+ * Contrast: every text token is checked against the surface it is used on.
+ * Ratios are noted inline; anything below 4.5:1 is marked as large-text-only or
+ * decorative and must not carry body copy.
  */
 
 /* Class/attribute dark mode: `dark:` variants key off data-theme. */
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 :root {
-  --o-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
-  --o-serif: var(--font-instrument-serif), Georgia, serif;
-  --o-mono: var(--font-plex-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+  /* ---------------------------------------------------------------------
+   * 1. RAW PALETTE — light
+   * ------------------------------------------------------------------- */
 
-  --o-bg: #fbf7f2;
-  --o-card: #ffffff;
-  --o-ink: #171310;
-  --o-ink2: #5c544a;
-  --o-ink3: #9a8f80;
-  --o-line: #e9e1d6;
-  --o-line2: #c9beae;
-  --o-accent: #ea580c;
-  --o-accent-hover: #c2410c;
+  /* Neutrals. A true neutral ramp (no warm cast) so the canvas reads
+   * clinical white rather than cream. */
+  --n-0: #ffffff; /* canvas + card                                      */
+  --n-25: #fafbfc; /* barely-there recess (column wells)                 */
+  --n-50: #f5f6f8; /* subtle fill (table headers, hover rows)            */
+  --n-100: #eef0f3; /* skeleton base                                     */
+  --n-150: #e8eaed; /* hairline borders, dividers                        */
+  --n-200: #d6d9de; /* stronger border, hover border                     */
+  --n-300: #c4c8ce; /* input border, dashed drop zones                   */
+  --n-400: #9ba1aa; /* decorative only — 2.60:1, NEVER body text         */
+  --n-450: #8f9094; /* display-muted, 3.19:1 — large/bold text only      */
+  --n-500: #6b7078; /* muted text, 4.98:1 — AA at any size               */
+  --n-600: #4c4e54; /* body text, 8.32:1                                 */
+  --n-900: #12141a; /* headings / near-black, 18.41:1                    */
 
-  --o-sk1: #efe7dc;
-  --o-sk2: #f9f4ee;
+  /* Accent — Option A "Signal Orange". Chosen because it clears AA in BOTH
+   * directions on white (4.61:1 as text, 4.61:1 for white text on it), which
+   * is what a single accent needs when it serves both numerals and buttons. */
+  --a-500: #cc4a08; /* the accent                                        */
+  --a-600: #b8410b; /* hover / pressed, and accent-colored TEXT on tint  */
+  --a-050: #fdf3ec; /* accent tint — selected rows, drop-target wash     */
 
-  --o-strong-t: #4a6b2a;
-  --o-strong-bg: #ebefdd;
-  --o-strong-bd: #cbd6ae;
-  --o-good-t: #2a6272;
-  --o-good-bg: #e2ecec;
-  --o-good-bd: #b8d2d4;
-  --o-fair-t: #8f6612;
-  --o-fair-bg: #f3ecd4;
-  --o-fair-bd: #decf9e;
-  --o-weak-t: #9c3d22;
-  --o-weak-bg: #f3e3da;
-  --o-weak-bd: #dfbca9;
-
-  --o-must-t: #9a3a0a;
-  --o-must-bg: #ffe0cc;
-  --o-must-bd: #f3c4a4;
+  /* Score bands. Semantic status, deliberately NOT the brand accent: these
+   * are read as data, not as chrome. All four are kept off the orange hue so
+   * nothing competes with the accent. Each is AA on white and on its tint. */
+  --band-strong-t: #1f6b3f;
+  --band-strong-bg: #eaf4ee;
+  --band-strong-bd: #c3e0d0;
+  --band-good-t: #1b5e86;
+  --band-good-bg: #e9f2f8;
+  --band-good-bd: #bdd8e8;
+  --band-fair-t: #7a5510;
+  --band-fair-bg: #f7f0df;
+  --band-fair-bd: #e3d3a8;
+  --band-weak-t: #a3341f;
+  --band-weak-bg: #faebe7;
+  --band-weak-bd: #ecc7bd;
+  /* Must-have requirement chip. Moved OFF orange (was #9a3a0a on #ffe0cc) —
+   * an orange chip next to an orange button spends the accent twice and the
+   * accent stops meaning "act here". Violet reads as a constraint marker. */
+  --band-must-t: #4b3fa6;
+  --band-must-bg: #eeedfb;
+  --band-must-bd: #d2cef2;
 }
 
 [data-theme="dark"] {
-  --o-bg: #171310;
-  --o-card: #221c16;
-  --o-ink: #fbf7f2;
-  --o-ink2: #b3a99d;
-  --o-ink3: #7a7064;
-  --o-line: #2e2620;
-  --o-line2: #4e4438;
-  --o-accent: #ea580c;
-  --o-accent-hover: #f2600f;
+  /* ---------------------------------------------------------------------
+   * 1b. RAW PALETTE — dark. Same roles, inverted ramp.
+   * ------------------------------------------------------------------- */
+  --n-0: #0f1115; /* canvas                                             */
+  --n-25: #131620;
+  --n-50: #161920; /* card — lifted off the canvas by value, not shadow  */
+  --n-100: #1e222a; /* skeleton base                                     */
+  --n-150: #24282f; /* hairline borders                                  */
+  --n-200: #333841; /* stronger border                                   */
+  --n-300: #434a55; /* input border                                      */
+  --n-400: #5f6672; /* decorative only                                   */
+  --n-450: #767d88; /* display-muted                                     */
+  --n-500: #8b9099; /* muted text, 5.89:1                                */
+  --n-600: #b4b9c1; /* body text, 9.58:1                                 */
+  --n-900: #f4f6f8; /* headings, 17.44:1                                 */
 
-  --o-sk1: #2a231c;
-  --o-sk2: #1e1813;
+  /* Orange has to get brighter on a dark canvas to stay legible: #cc4a08
+   * only reaches 3.1:1 here. #ff7a33 gives 7.27:1. Its button pairs with
+   * near-black text (7.27:1) — white on orange would fail at this lightness. */
+  --a-500: #ff7a33;
+  --a-600: #ff8f52;
+  --a-050: #2a1409;
 
-  --o-strong-t: #a9c87e;
-  --o-strong-bg: rgba(140, 170, 90, 0.1);
-  --o-strong-bd: rgba(140, 170, 90, 0.28);
-  --o-good-t: #7fb4c4;
-  --o-good-bg: rgba(90, 150, 170, 0.1);
-  --o-good-bd: rgba(90, 150, 170, 0.28);
-  --o-fair-t: #d9a93f;
-  --o-fair-bg: rgba(200, 160, 60, 0.1);
-  --o-fair-bd: rgba(200, 160, 60, 0.28);
-  --o-weak-t: #e08568;
-  --o-weak-bg: rgba(200, 90, 60, 0.1);
-  --o-weak-bd: rgba(200, 90, 60, 0.28);
-
-  --o-must-t: #f0a277;
-  --o-must-bg: rgba(234, 88, 12, 0.12);
-  --o-must-bd: rgba(234, 88, 12, 0.32);
+  --band-strong-t: #6fca97;
+  --band-strong-bg: rgba(47, 160, 95, 0.12);
+  --band-strong-bd: rgba(47, 160, 95, 0.3);
+  --band-good-t: #6fb6dd;
+  --band-good-bg: rgba(40, 140, 200, 0.12);
+  --band-good-bd: rgba(40, 140, 200, 0.3);
+  --band-fair-t: #d9b25e;
+  --band-fair-bg: rgba(190, 150, 50, 0.12);
+  --band-fair-bd: rgba(190, 150, 50, 0.3);
+  --band-weak-t: #e88b74;
+  --band-weak-bg: rgba(200, 80, 55, 0.12);
+  --band-weak-bd: rgba(200, 80, 55, 0.3);
+  --band-must-t: #a49bec;
+  --band-must-bg: rgba(120, 105, 230, 0.14);
+  --band-must-bd: rgba(120, 105, 230, 0.32);
 }
 
+/* -----------------------------------------------------------------------
+ * 2. SEMANTIC ALIASES — the names components are allowed to reference.
+ * Existing names are preserved verbatim so no component has to change.
+ * --------------------------------------------------------------------- */
+:root,
+[data-theme="dark"] {
+  /* Type families. The serif is retired — the display treatment is two-tone
+   * bold sans (see DisplayTitle), not italic serif. --o-serif stays aliased to
+   * the sans stack so a stray `font-serif` can't reintroduce one. */
+  --o-sans: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  --o-serif: var(--o-sans);
+  --o-mono: var(--font-plex-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Surfaces */
+  --o-bg: var(--n-0);
+  --o-card: var(--n-0);
+  --o-well: var(--n-25); /* recessed: pipeline columns              */
+  --o-subtle: var(--n-50); /* filled: table headers, hover rows       */
+
+  /* Text */
+  --o-ink: var(--n-900); /* headings                                */
+  --o-ink2: var(--n-600); /* body                                    */
+  --o-ink3: var(--n-500); /* muted — still AA                        */
+  --o-ink4: var(--n-400); /* decorative only, never body text        */
+  --o-display-muted: var(--n-450); /* the light half of a two-tone headline   */
+
+  /* Lines */
+  --o-line: var(--n-150);
+  --o-line2: var(--n-200);
+  --o-line3: var(--n-300);
+
+  /* Accent */
+  --o-accent: var(--a-500);
+  --o-accent-hover: var(--a-600);
+  --o-accent-ink: var(--a-600); /* accent text sitting on --o-accent-tint  */
+  --o-accent-tint: var(--a-050);
+  --o-on-accent: #ffffff; /* text on a filled accent button          */
+
+  /* Skeleton shimmer */
+  --o-sk1: var(--n-100);
+  --o-sk2: var(--n-50);
+
+  /* Score bands */
+  --o-strong-t: var(--band-strong-t);
+  --o-strong-bg: var(--band-strong-bg);
+  --o-strong-bd: var(--band-strong-bd);
+  --o-good-t: var(--band-good-t);
+  --o-good-bg: var(--band-good-bg);
+  --o-good-bd: var(--band-good-bd);
+  --o-fair-t: var(--band-fair-t);
+  --o-fair-bg: var(--band-fair-bg);
+  --o-fair-bd: var(--band-fair-bd);
+  --o-weak-t: var(--band-weak-t);
+  --o-weak-bg: var(--band-weak-bg);
+  --o-weak-bd: var(--band-weak-bd);
+  --o-must-t: var(--band-must-t);
+  --o-must-bg: var(--band-must-bg);
+  --o-must-bd: var(--band-must-bd);
+
+  /* Elevation — soft and flat. Low alpha, tight blur, no spread: gentle
+   * depth that keeps edges crisp. Never puffy. Cards rely on shadow-card,
+   * and gain shadow-card-hover on hover instead of growing. */
+  --o-shadow-xs: 0 1px 2px rgba(16, 18, 24, 0.04);
+  --o-shadow-card: 0 1px 3px rgba(16, 18, 24, 0.05), 0 1px 2px rgba(16, 18, 24, 0.03);
+  --o-shadow-card-hover: 0 4px 12px rgba(16, 18, 24, 0.07), 0 1px 3px rgba(16, 18, 24, 0.04);
+  --o-shadow-pop: 0 8px 28px rgba(16, 18, 24, 0.1), 0 2px 6px rgba(16, 18, 24, 0.05);
+}
+
+[data-theme="dark"] {
+  /* Shadows barely register on a dark canvas — dark mode separates surfaces
+   * by value instead, and keeps only a faint shadow for popovers. */
+  --o-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --o-shadow-card: 0 1px 3px rgba(0, 0, 0, 0.45);
+  --o-shadow-card-hover: 0 4px 12px rgba(0, 0, 0, 0.55);
+  --o-shadow-pop: 0 8px 28px rgba(0, 0, 0, 0.6);
+  --o-on-accent: #1a1005; /* near-black on bright orange, 7.2:1       */
+}
+
+/* -----------------------------------------------------------------------
+ * 3. TAILWIND UTILITIES
+ * --------------------------------------------------------------------- */
 @theme inline {
   --font-sans: var(--o-sans);
   --font-serif: var(--o-serif);
@@ -86,13 +204,24 @@
 
   --color-paper: var(--o-bg);
   --color-card: var(--o-card);
+  --color-well: var(--o-well);
+  --color-subtle: var(--o-subtle);
+
   --color-ink: var(--o-ink);
   --color-ink-2: var(--o-ink2);
   --color-ink-3: var(--o-ink3);
+  --color-ink-4: var(--o-ink4);
+  --color-display-muted: var(--o-display-muted);
+
   --color-line: var(--o-line);
   --color-line-2: var(--o-line2);
+  --color-line-3: var(--o-line3);
+
   --color-signal: var(--o-accent);
   --color-signal-hover: var(--o-accent-hover);
+  --color-signal-ink: var(--o-accent-ink);
+  --color-signal-tint: var(--o-accent-tint);
+  --color-on-signal: var(--o-on-accent);
 
   --color-strong-text: var(--o-strong-t);
   --color-strong-bg: var(--o-strong-bg);
@@ -111,7 +240,65 @@
   --color-must-bg: var(--o-must-bg);
   --color-must-border: var(--o-must-bd);
 
-  --animate-shimmer: o-shimmer 1.8s linear infinite;
+  /* Elevation → shadow-xs / shadow-card / shadow-card-hover / shadow-pop */
+  --shadow-xs: var(--o-shadow-xs);
+  --shadow-card: var(--o-shadow-card);
+  --shadow-card-hover: var(--o-shadow-card-hover);
+  --shadow-pop: var(--o-shadow-pop);
+
+  /* Radius — modest. Chips 4px, controls 6px, cards 8px, panels 12px.
+   * Nothing rounder than 12px except a true pill. */
+  --radius-xs: 3px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-pill: 999px;
+
+  /* Type scale. Tight, readable, strong hierarchy — the jump from display to
+   * body is deliberate. Sizes pair with the weights below. */
+  --text-display: 40px;
+  --text-display--line-height: 1.05;
+  --text-display--letter-spacing: -0.03em;
+  --text-h1: 28px;
+  --text-h1--line-height: 1.15;
+  --text-h1--letter-spacing: -0.025em;
+  --text-h2: 20px;
+  --text-h2--line-height: 1.25;
+  --text-h2--letter-spacing: -0.015em;
+  --text-h3: 15.5px;
+  --text-h3--line-height: 1.35;
+  --text-h3--letter-spacing: -0.01em;
+  --text-body: 13.5px;
+  --text-body--line-height: 1.6;
+  --text-sm: 12.5px;
+  --text-sm--line-height: 1.5;
+  --text-xs: 11px;
+  --text-xs--line-height: 1.45;
+  /* Mono label: the small tracked-out caps used for nav, column heads, chips */
+  --text-label: 10.5px;
+  --text-label--line-height: 1.2;
+  --text-label--letter-spacing: 0.1em;
+
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-black: 800;
+
+  /* Easing. The built-in CSS curves are too weak to read as intentional, so
+   * the house curves override Tailwind's defaults. ease-in is deliberately
+   * absent: it delays the first frame, which is exactly when the user is
+   * looking, and makes the UI feel sluggish. */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+
+  /* Durations. UI motion stays under 300ms; press feedback is near-instant. */
+  --o-dur-press: 120ms;
+  --o-dur-fast: 160ms;
+  --o-dur-base: 200ms;
+
+  --animate-shimmer: o-shimmer 1.2s linear infinite;
   --animate-pulse-dot: o-pulse 1.4s ease-in-out infinite;
 }
 
@@ -144,7 +331,7 @@ body {
 }
 
 ::selection {
-  background: rgba(234, 88, 12, 0.18);
+  background: color-mix(in srgb, var(--o-accent) 18%, transparent);
 }
 
 /* Shimmer placeholder — used while a candidate is still parsing/scoring. */
@@ -154,11 +341,28 @@ body {
   animation: var(--animate-shimmer);
 }
 
-/* Keyboard focus — a single accent ring everywhere, for accessibility. */
+/* Keyboard focus — one accent ring everywhere. The 2px offset keeps the ring
+ * clear of the element's own border so it stays visible on bordered cards and
+ * on the filled accent button alike. */
 :focus-visible {
   outline: 2px solid var(--o-accent);
   outline-offset: 2px;
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
+}
+
+/* On a filled accent surface the accent ring would disappear into it — invert
+ * to the on-accent color there. */
+.bg-signal:focus-visible,
+[data-on-accent]:focus-visible {
+  outline-color: var(--o-on-accent);
+  outline-offset: 2px;
+}
+
+/* Users who force high contrast get a heavier ring. */
+@media (prefers-contrast: more) {
+  :focus-visible {
+    outline-width: 3px;
+  }
 }
 
 /* Subtle entrance for page content. */
@@ -173,17 +377,70 @@ body {
   }
 }
 .o-fade-in {
-  animation: o-fade-in 0.4s ease both;
+  animation: o-fade-in var(--o-dur-base) var(--ease-out) both;
 }
 
-/* Respect users who ask for less motion — disable animations/transitions. */
+/* Board cards enter staggered rather than all at once. The delay is capped so
+ * a long column never makes the recruiter wait on decoration — and the cards
+ * are interactive the whole time, since this only animates opacity/transform. */
+.o-stagger > *:not([data-no-stagger]) {
+  animation: o-fade-in var(--o-dur-base) var(--ease-out) both;
+}
+.o-stagger > *:nth-child(1) {
+  animation-delay: 0ms;
+}
+.o-stagger > *:nth-child(2) {
+  animation-delay: 40ms;
+}
+.o-stagger > *:nth-child(3) {
+  animation-delay: 80ms;
+}
+.o-stagger > *:nth-child(4) {
+  animation-delay: 120ms;
+}
+.o-stagger > *:nth-child(n + 5) {
+  animation-delay: 160ms;
+}
+
+/* Hover transforms only where hovering is real. On touch, `:hover` sticks
+ * after a tap and the card looks stuck in its lifted state. */
+@media (hover: hover) and (pointer: fine) {
+  .o-lift:hover {
+    transform: translateY(-2px);
+  }
+}
+
+/* Press feedback: instant, and on pointer-down rather than release. */
+.o-press {
+  transition: transform var(--o-dur-press) var(--ease-out);
+}
+.o-press:active {
+  transform: scale(0.97);
+}
+
+/* Reduced motion means gentler, not none: opacity and colour still carry
+ * meaning (what's loading, what's hovered), so only movement is removed. */
 @media (prefers-reduced-motion: reduce) {
+  .o-lift:hover,
+  .o-press:active {
+    transform: none;
+  }
+  .o-fade-in,
+  .o-stagger > *:not([data-no-stagger]) {
+    animation: o-reduced-fade var(--o-dur-fast) var(--ease-out) both;
+  }
   *,
   *::before,
   *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+@keyframes o-reduced-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }

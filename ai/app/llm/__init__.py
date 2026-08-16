@@ -6,7 +6,7 @@ from app.llm.base import (
     LLMNotConfiguredError,
     LLMRefusalError,
 )
-from app.llm.factory import build_llm_client
+from app.llm.factory import build_llm_client, provider_is_configured
 
 __all__ = [
     "LLMClient",
@@ -14,4 +14,5 @@ __all__ = [
     "LLMNotConfiguredError",
     "LLMRefusalError",
     "build_llm_client",
+    "provider_is_configured",
 ]

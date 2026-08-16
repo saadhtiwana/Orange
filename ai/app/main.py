@@ -7,7 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from app.config import get_settings
-from app.llm import LLMError, LLMNotConfiguredError, LLMRefusalError
+from app.llm import LLMError, LLMNotConfiguredError, LLMRefusalError, provider_is_configured
 from app.routers import job_architect
 
 app = FastAPI(
@@ -53,7 +53,7 @@ async def health() -> dict[str, object]:
         "llm": {
             "provider": settings.llm_provider,
             "model": settings.llm_model,
-            "configured": bool(settings.anthropic_api_key),
+            "configured": provider_is_configured(settings),
         },
     }
 
