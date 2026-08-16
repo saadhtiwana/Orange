@@ -14,7 +14,7 @@ export default function Error({ reset }: { error: Error; reset: () => void }) {
         A screen hit an unexpected error. Nothing was lost — try again.
       </p>
       <button type="button" onClick={reset} className={btn("primary", "mt-6")}>
-        TRY AGAIN
+        Try again
       </button>
     </div>
   );

@@ -11,10 +11,12 @@ import type { RequirementOutcome, ScoreBand } from "@/lib/contracts/types";
 
 type ButtonVariant = "primary" | "outline" | "quiet";
 
-/** Shared button geometry: 3px radius, a 2px border on every variant so the
- *  filled and outlined forms are the same size, and a 200ms colour fade. */
+/** Shared button geometry: 14px bold sans, 3px radius, a 2px border on every
+ *  variant so the filled and outlined forms are the same size, and a 200ms
+ *  colour fade. Sans at a readable size — not tracked-out mono — is what makes
+ *  a button read as a control rather than a caption. */
 const BUTTON_BASE =
-  "inline-flex h-9 items-center justify-center rounded-xs border-2 px-[18px] font-mono text-[10.5px] font-semibold tracking-[0.08em] transition-[background-color,border-color,color] duration-200 disabled:pointer-events-none disabled:opacity-40";
+  "inline-flex h-10 items-center justify-center rounded-xs border-2 px-5 text-[13.5px] leading-[1.4] font-bold whitespace-nowrap transition-[background-color,border-color,color] duration-200 disabled:pointer-events-none disabled:opacity-40";
 
 const BUTTON_VARIANTS: Record<ButtonVariant, string> = {
   /** The one place the accent is spent: the primary action on a screen. */
@@ -29,6 +31,24 @@ const BUTTON_VARIANTS: Record<ButtonVariant, string> = {
  *  a component so `<button>` and `<Link>` keep their own props and handlers. */
 export function btn(variant: ButtonVariant = "primary", className = ""): string {
   return `${BUTTON_BASE} ${BUTTON_VARIANTS[variant]}${className ? ` ${className}` : ""}`;
+}
+
+/* ------------------------------------------------------------------ labels */
+
+/** The small uppercase label used for column heads, section titles and table
+ *  headers. Sans with modest tracking — the wide-tracked mono this replaced
+ *  read as decoration rather than structure. */
+export const LABEL = "text-ink-3 text-[11px] font-semibold tracking-[0.06em] uppercase";
+
+/** Section heading inside a panel. */
+export function SectionLabel({
+  children,
+  className = "",
+}: {
+  children: ReactNode;
+  className?: string;
+}) {
+  return <span className={`${LABEL} ${className}`}>{children}</span>;
 }
 
 /* ----------------------------------------------------------- display title */
@@ -81,20 +101,15 @@ const BAND_CLASSES: Record<ScoreBand, string> = {
   weak: "text-weak-text bg-weak-bg border-weak-border",
 };
 
-/** The score chip, e.g. `strong · 91`. Band word is always shown, so it reads
- *  without relying on color alone. */
+/** The score chip, e.g. `Strong 91`. The band word is always shown, so the chip
+ *  reads without relying on color alone. */
 export function BandBadge({ band, value }: { band: ScoreBand; value?: number }) {
   return (
     <span
-      className={`inline-flex items-center rounded-xs border px-[9px] py-[3px] font-mono text-[10.5px] font-medium ${BAND_CLASSES[band]}`}
+      className={`inline-flex items-baseline gap-1.5 rounded-xs border px-2.5 py-1 text-[11.5px] leading-none font-semibold capitalize ${BAND_CLASSES[band]}`}
     >
       {band}
-      {value != null && (
-        <>
-          <span className="opacity-50">&nbsp;·&nbsp;</span>
-          <span className="font-semibold tabular-nums">{value}</span>
-        </>
-      )}
+      {value != null && <span className="text-[13px] font-bold tabular-nums">{value}</span>}
     </span>
   );
 }
@@ -112,7 +127,7 @@ const OUTCOME_CLASSES: Record<RequirementOutcome, string> = {
 export function OutcomeBadge({ outcome }: { outcome: RequirementOutcome }) {
   return (
     <span
-      className={`inline-flex items-center rounded-xs border px-[9px] py-[2.5px] font-mono text-[10px] font-semibold ${OUTCOME_CLASSES[outcome]}`}
+      className={`inline-flex items-center rounded-xs border px-2.5 py-1 text-[11.5px] leading-none font-semibold capitalize ${OUTCOME_CLASSES[outcome]}`}
     >
       {outcome}
     </span>
@@ -121,9 +136,9 @@ export function OutcomeBadge({ outcome }: { outcome: RequirementOutcome }) {
 
 /** The "scoring…" pending pill — dashed border + pulsing signal dot. Shown
  *  instead of a fake score while the ranker is still running. */
-export function ScoringPill({ label = "scoring…" }: { label?: string }) {
+export function ScoringPill({ label = "Scoring…" }: { label?: string }) {
   return (
-    <span className="border-line-2 text-ink-3 inline-flex items-center gap-1.5 rounded-xs border border-dashed px-[9px] py-[3px] font-mono text-[10px]">
+    <span className="border-line-2 text-ink-3 inline-flex items-center gap-1.5 rounded-xs border border-dashed px-2.5 py-1 text-[11.5px] leading-none font-medium">
       <span className="bg-signal size-1 rounded-full [animation:var(--animate-pulse-dot)]" />
       {label}
     </span>

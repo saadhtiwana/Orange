@@ -5,9 +5,9 @@ import { ThemeToggle } from "./theme-toggle";
 import { btn } from "./ui";
 
 const NAV_ITEMS: { label: string; href: string }[] = [
-  { label: "ROLES", href: "/roles" },
-  { label: "CANDIDATES", href: "/pipeline" },
-  { label: "ACTIVITY", href: "/pipeline" },
+  { label: "Roles", href: "/roles" },
+  { label: "Candidates", href: "/pipeline" },
+  { label: "Activity", href: "/pipeline" },
 ];
 
 /** App-wide top bar: logo, section nav, theme toggle, primary action. */
@@ -19,7 +19,7 @@ export function TopNav({ active }: { active?: string }) {
         <span className="text-[17px] font-bold tracking-[-0.03em] lowercase">orange</span>
       </Link>
 
-      <nav className="hidden gap-[22px] font-mono text-[10px] font-medium tracking-[0.08em] md:flex">
+      <nav className="hidden gap-7 text-[14px] font-semibold md:flex">
         {NAV_ITEMS.map((item) => (
           <Link
             key={item.label}
@@ -27,7 +27,7 @@ export function TopNav({ active }: { active?: string }) {
             className={
               active === item.label
                 ? "text-signal-ink"
-                : "text-ink-3 hover:text-signal-ink transition-colors duration-200"
+                : "text-ink-2 hover:text-signal-ink transition-colors duration-200"
             }
           >
             {item.label}
@@ -38,7 +38,7 @@ export function TopNav({ active }: { active?: string }) {
       <div className="ml-auto flex items-center gap-[10px]">
         <ThemeToggle />
         <Link href="/upload" className={btn("primary")}>
-          UPLOAD CVS
+          Upload CVs
         </Link>
       </div>
     </header>

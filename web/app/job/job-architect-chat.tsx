@@ -48,7 +48,7 @@ export function JobArchitectChat() {
         <ol className="flex flex-col gap-3">
           {history.map((turn, index) => (
             <li key={`${turn.role}-${index}`} className="flex flex-col gap-[7px]">
-              <span className="text-ink-3 flex items-center gap-[6px] font-mono text-[9px] font-semibold tracking-[0.14em]">
+              <span className="text-ink-3 flex items-center gap-[6px] text-[11px] font-semibold tracking-[0.06em] uppercase">
                 {turn.role === "assistant" && (
                   <span className="bg-signal size-[5px] rounded-full" />
                 )}
@@ -80,7 +80,7 @@ export function JobArchitectChat() {
             disabled={pending || brief.trim().length === 0}
             className={btn("primary", "self-start")}
           >
-            {pending ? "DRAFTING…" : "DRAFT JOB DESCRIPTION"}
+            {pending ? "Drafting…" : "Draft job description"}
           </button>
         </form>
 
@@ -98,7 +98,11 @@ export function JobArchitectChat() {
         {jobDescription ? (
           <>
             <JobDescriptionView jobDescription={jobDescription} />
-            {jobId && <p className="text-ink-3 mt-4 font-mono text-[10px]">Saved as {jobId}</p>}
+            {jobId && (
+              <p className="text-ink-3 mt-4 text-[12px]">
+                Saved as <span className="font-mono">{jobId}</span>
+              </p>
+            )}
           </>
         ) : (
           <p className="text-ink-3 text-[13px]">

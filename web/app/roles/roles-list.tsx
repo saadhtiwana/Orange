@@ -64,20 +64,20 @@ export function RolesList() {
           </div>
         </div>
         <Link href="/job" className={btn("primary")}>
-          NEW ROLE
+          New role
         </Link>
       </div>
 
       {/* Column headers */}
-      <div className="border-line text-ink-3 mt-10 grid grid-cols-[1fr_auto] gap-5 border-b px-5 pb-3 font-mono text-[9px] font-medium tracking-[0.14em] md:grid-cols-[2.2fr_1fr_130px_130px]">
+      <div className="border-line text-ink-3 mt-10 grid grid-cols-[1fr_auto] gap-5 border-b px-5 pb-3 text-[11px] font-semibold tracking-[0.06em] uppercase md:grid-cols-[2.2fr_1fr_130px_130px]">
         <span>ROLE</span>
         <span className="hidden md:block">MODE</span>
         <span>CANDIDATES</span>
         <span className="hidden md:block">SCORING</span>
       </div>
 
-      {error && <p className="text-weak-text mt-6 font-mono text-sm">{error}</p>}
-      {!roles && !error && <p className="text-ink-3 mt-6 font-mono text-sm">Loading roles…</p>}
+      {error && <p className="text-weak-text mt-6 text-sm">{error}</p>}
+      {!roles && !error && <p className="text-ink-3 mt-6 text-sm">Loading roles…</p>}
       {roles?.length === 0 && (
         <div className="border-line-2 mt-[14px] flex flex-col items-center rounded-lg border border-dashed py-16 text-center">
           <div className="text-[15px] font-semibold">No roles yet</div>
@@ -85,7 +85,7 @@ export function RolesList() {
             Describe your first role and Orange turns it into a structured job to score against.
           </p>
           <Link href="/job" className={btn("primary", "mt-5")}>
-            NEW ROLE
+            New role
           </Link>
         </div>
       )}
@@ -105,10 +105,8 @@ export function RolesList() {
           <div className="text-ink-2 hidden text-[12px] md:block">
             {WORK_MODE_LABELS[job.work_mode] ?? job.work_mode}
           </div>
-          <div className="text-signal-ink font-mono text-[12px] font-semibold tabular-nums">
-            {total}
-          </div>
-          <div className="text-ink-2 hidden items-center gap-[6px] font-mono text-[11px] tabular-nums md:flex">
+          <div className="text-signal-ink text-[15px] font-bold tabular-nums">{total}</div>
+          <div className="text-ink-2 hidden items-center gap-[6px] text-[13px] tabular-nums md:flex">
             {scoring > 0 ? (
               <>
                 <span className="bg-signal size-1 rounded-full [animation:var(--animate-pulse-dot)]" />

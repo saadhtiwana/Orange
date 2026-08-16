@@ -6,7 +6,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import type { DragEvent } from "react";
 
 import { CandidateCard } from "@/components/candidate-card";
-import { btn, DisplayTitle } from "@/components/ui";
+import { btn, DisplayTitle, LABEL } from "@/components/ui";
 import { api } from "@/lib/api";
 import { adjacentStage, boardTotals, isInStage, moveCardLocally } from "@/lib/pipeline/board-utils";
 import {
@@ -72,10 +72,10 @@ export function PipelineBoard() {
   const totals = useMemo(() => (board ? boardTotals(board) : { all: 0, scoring: 0 }), [board]);
 
   if (error && !board) {
-    return <p className="text-weak-text p-10 font-mono text-sm">{error}</p>;
+    return <p className="text-weak-text p-10 text-sm">{error}</p>;
   }
   if (!board) {
-    return <p className="text-ink-3 p-10 font-mono text-sm">Loading board…</p>;
+    return <p className="text-ink-3 p-10 text-sm">Loading board…</p>;
   }
 
   return (
@@ -83,7 +83,7 @@ export function PipelineBoard() {
       {/* Job header */}
       <div className="border-line bg-card flex flex-none items-end justify-between gap-6 border-b px-7 py-6">
         <DisplayTitle lead="Pipeline" subject={board.jobTitle} size={28} />
-        <div className="text-ink-3 flex items-center gap-2 pb-1 font-mono text-[10.5px] tabular-nums">
+        <div className="text-ink-3 flex items-center gap-2 pb-1 text-[13px] tabular-nums">
           {totals.scoring > 0 && (
             <span className="bg-signal size-[5px] rounded-full [animation:var(--animate-pulse-dot)]" />
           )}
@@ -100,7 +100,7 @@ export function PipelineBoard() {
             Upload CVs and Orange starts reading immediately — first scores land within a minute.
           </p>
           <Link href="/upload" className={btn("primary", "mt-6")}>
-            UPLOAD CVS
+            Upload CVs
           </Link>
         </div>
       ) : (
@@ -129,10 +129,8 @@ export function PipelineBoard() {
                   } ${dragOverStage === stage ? "bg-signal-tint" : ""}`}
                 >
                   <div className="flex items-baseline gap-2 px-[2px] pb-1">
-                    <span className="text-ink-2 font-mono text-[10px] font-semibold tracking-[0.12em]">
-                      {STAGE_LABELS[stage].toUpperCase()}
-                    </span>
-                    <span className="text-ink-3 font-mono text-[10px] tabular-nums">
+                    <span className={LABEL}>{STAGE_LABELS[stage]}</span>
+                    <span className="text-ink-4 text-[11px] font-semibold tabular-nums">
                       {cards.length}
                     </span>
                   </div>
@@ -163,7 +161,7 @@ export function PipelineBoard() {
       )}
 
       {error && board && (
-        <div className="border-line text-weak-text flex h-10 flex-none items-center border-t px-7 font-mono text-[10px]">
+        <div className="border-line text-weak-text flex h-10 flex-none items-center border-t px-7 text-[12.5px]">
           {error}
         </div>
       )}

@@ -19,9 +19,9 @@ export function ThemeToggle() {
     <button
       type="button"
       onClick={toggle}
-      className="border-line-2 text-ink-2 hover:border-ink hover:text-ink inline-flex h-[34px] items-center rounded-xs border-2 px-4 font-mono text-[10px] font-medium tracking-[0.1em] transition-[background-color,border-color,color] duration-200"
+      className="border-line-2 text-ink-2 hover:border-ink hover:text-ink inline-flex h-10 items-center rounded-xs border-2 px-4 text-[13.5px] leading-[1.4] font-bold transition-[background-color,border-color,color] duration-200"
     >
-      {theme === "dark" ? "LIGHT" : "DARK"}
+      {theme === "dark" ? "Light" : "Dark"}
     </button>
   );
 }

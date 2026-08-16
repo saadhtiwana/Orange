@@ -4,7 +4,7 @@ import type { JobDescription, Requirement } from "@/lib/contracts/types";
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section className="border-line border-t pt-4">
-      <h3 className="text-ink-3 mb-2 font-mono text-[10px] font-semibold tracking-[0.14em]">
+      <h3 className="text-ink-3 mb-2 text-[11px] font-semibold tracking-[0.06em] uppercase">
         {title}
       </h3>
       {children}
@@ -14,7 +14,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 
 function Pill({ children }: { children: React.ReactNode }) {
   return (
-    <span className="bg-subtle border-line text-ink-2 rounded-xs border px-2 py-0.5 font-mono text-[10px]">
+    <span className="bg-subtle border-line text-ink-2 rounded-xs border px-2 py-0.5 text-[11.5px] font-medium capitalize">
       {children}
     </span>
   );
@@ -28,13 +28,13 @@ function RequirementRow({ requirement }: { requirement: Requirement }) {
       <span
         className={
           mustHave
-            ? "text-must-text bg-must-bg border-must-border rounded-xs border px-2 py-[2px] font-mono text-[8.5px] font-semibold tracking-[0.1em]"
-            : "text-ink-3 border-line-2 rounded-xs border px-2 py-[2px] font-mono text-[8.5px] font-semibold tracking-[0.1em]"
+            ? "text-must-text bg-must-bg border-must-border rounded-xs border px-2 py-[2px] text-[10px] font-bold tracking-[0.06em]"
+            : "text-ink-3 border-line-2 rounded-xs border px-2 py-[2px] text-[10px] font-bold tracking-[0.06em]"
         }
       >
         {mustHave ? "MUST" : "NICE"}
       </span>
-      <span className="text-ink-2 ml-auto font-mono text-[11px] tabular-nums">
+      <span className="text-ink-2 ml-auto text-[12.5px] font-semibold tabular-nums">
         {requirement.weight.toFixed(2)}
       </span>
     </li>

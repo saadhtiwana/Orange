@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-import { BandBadge, DisplayTitle, OutcomeBadge, ScoringPill } from "@/components/ui";
+import { BandBadge, DisplayTitle, LABEL, OutcomeBadge, ScoringPill } from "@/components/ui";
 import { api, ApiError } from "@/lib/api";
 import type {
   CandidateProfile,
@@ -72,16 +72,16 @@ export function CandidateAudit({ candidateId }: { candidateId: string }) {
         <p className="text-ink-2 mt-3 text-[13px]">{error}</p>
         <Link
           href="/pipeline"
-          className="text-ink-2 hover:text-signal-ink mt-6 inline-block font-mono text-[10px] tracking-[0.08em] transition-colors duration-200"
+          className="text-ink-2 hover:text-signal-ink mt-6 inline-block text-[13px] font-semibold transition-colors duration-200"
         >
-          ← BACK TO PIPELINE
+          ← Back to pipeline
         </Link>
       </div>
     );
   }
 
   if (!data) {
-    return <p className="text-ink-3 p-10 font-mono text-sm">Loading candidate…</p>;
+    return <p className="text-ink-3 p-10 text-sm">Loading candidate…</p>;
   }
 
   const { candidate } = data;
@@ -100,9 +100,9 @@ export function CandidateAudit({ candidateId }: { candidateId: string }) {
     <div className="o-fade-in mx-auto w-full max-w-[1200px] px-10 pt-8 pb-24">
       <Link
         href="/pipeline"
-        className="text-ink-3 hover:text-signal-ink font-mono text-[10px] tracking-[0.1em] transition-colors duration-200"
+        className="text-ink-3 hover:text-signal-ink text-[13px] font-semibold transition-colors duration-200"
       >
-        ← PIPELINE
+        ← Pipeline
       </Link>
 
       {/* Header */}
@@ -112,7 +112,7 @@ export function CandidateAudit({ candidateId }: { candidateId: string }) {
             <span className="translate-y-[-6px]">
               <BandBadge band={score.overall.band} value={score.overall.score} />
             </span>
-            <span className="text-ink-3 font-mono text-[10px] tabular-nums">
+            <span className="text-ink-4 text-[12.5px] tabular-nums">
               conf {score.overall.confidence.toFixed(2)}
             </span>
           </>
@@ -167,11 +167,11 @@ export function CandidateAudit({ candidateId }: { candidateId: string }) {
                           style={{ width: `${dim.score}%` }}
                         />
                       </span>
-                      <span className="text-signal-ink font-mono text-[11.5px] font-semibold tabular-nums">
+                      <span className="text-signal-ink text-[15px] font-bold tabular-nums">
                         {dim.score}
                       </span>
                     </span>
-                    <span className="text-ink-3 ml-auto font-mono text-[10px] tabular-nums">
+                    <span className="text-ink-4 ml-auto text-[12px] tabular-nums">
                       w {dim.weight.toFixed(2)}
                     </span>
                     <span className="text-ink-2 basis-full text-[12.5px] leading-[1.5]">
@@ -183,9 +183,7 @@ export function CandidateAudit({ candidateId }: { candidateId: string }) {
 
               <div className="mt-11 flex items-baseline justify-between">
                 <SectionLabel>REQUIREMENTS — EVIDENCE TRAIL</SectionLabel>
-                <span className="text-ink-3 font-mono text-[10px]">
-                  every quote is verbatim from the cv
-                </span>
+                <span className="text-ink-4 text-[12px]">every quote is verbatim from the cv</span>
               </div>
               <div className="border-line bg-card shadow-card mt-[14px] rounded-lg border">
                 {(score.requirement_results ?? []).map((result, i) => {
@@ -196,7 +194,9 @@ export function CandidateAudit({ candidateId }: { candidateId: string }) {
                       className={`px-[22px] py-[18px] ${i > 0 ? "border-line border-t" : ""}`}
                     >
                       <div className="flex items-center gap-3">
-                        <span className="text-ink-3 font-mono text-[10px]">R{i + 1}</span>
+                        <span className="text-ink-4 text-[11px] font-bold tabular-nums">
+                          R{i + 1}
+                        </span>
                         <span className="text-[14px] font-semibold">
                           {reqLabel.get(result.requirement_id) ?? result.requirement_id}
                         </span>
@@ -221,7 +221,7 @@ export function CandidateAudit({ candidateId }: { candidateId: string }) {
                   {(candidate.work_experience ?? []).map((exp, i) => (
                     <div key={i} className={i > 0 ? "border-line mt-4 border-t pt-4" : ""}>
                       <div className="text-[13.5px] font-semibold">{exp.title}</div>
-                      <div className="text-ink-3 mt-[3px] font-mono text-[10px]">
+                      <div className="text-ink-3 mt-[3px] text-[11.5px]">
                         {exp.company} · {monthRange(exp.start, exp.end, exp.is_current)}
                       </div>
                       {exp.highlights?.[0] && (
@@ -243,12 +243,12 @@ export function CandidateAudit({ candidateId }: { candidateId: string }) {
                         <div className="text-[13.5px] font-semibold">
                           {ed.field ?? ed.degree_level}
                         </div>
-                        <div className="text-ink-3 mt-[3px] font-mono text-[10px]">
+                        <div className="text-ink-3 mt-[3px] text-[11.5px]">
                           {ed.institution}
                           {ed.end && ` · ${ed.end}`}
                         </div>
                         {ed.gpa != null && (
-                          <div className="text-ink-2 mt-[5px] font-mono text-[10.5px]">
+                          <div className="text-ink-2 mt-[5px] text-[11.5px] tabular-nums">
                             GPA {ed.gpa}
                             {ed.gpa_scale && ` · scale ${ed.gpa_scale}`}
                           </div>
@@ -272,7 +272,7 @@ export function CandidateAudit({ candidateId }: { candidateId: string }) {
                       >
                         <span className="text-[12.5px]">{skill.name}</span>
                         {skill.years != null && (
-                          <span className="text-ink-3 font-mono text-[10px]">
+                          <span className="text-ink-4 text-[11.5px] tabular-nums">
                             {skill.years} yrs
                           </span>
                         )}
@@ -290,17 +290,13 @@ export function CandidateAudit({ candidateId }: { candidateId: string }) {
 }
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
-  return (
-    <span className="text-ink-3 font-mono text-[10px] font-semibold tracking-[0.14em]">
-      {children}
-    </span>
-  );
+  return <span className={LABEL}>{children}</span>;
 }
 
 function SummaryCard({ label, dot, items }: { label: string; dot: string; items?: string[] }) {
   return (
     <div className="border-line bg-card shadow-card rounded-lg border p-5">
-      <div className="text-ink-3 flex items-center gap-[6px] font-mono text-[9px] font-semibold tracking-[0.14em]">
+      <div className={`${LABEL} flex items-center gap-[6px]`}>
         <span className={`size-[5px] rounded-full ${dot}`} />
         {label}
       </div>
@@ -326,9 +322,7 @@ function EvidenceRow({ ev }: { ev: Evidence }) {
   const meta = POLARITY[polarity];
   return (
     <div className="bg-subtle border-line mt-[10px] ml-[34px] flex items-baseline gap-[10px] rounded-md border px-[14px] py-[10px]">
-      <span
-        className={`flex-none font-mono text-[8.5px] font-semibold tracking-[0.12em] ${meta.cls}`}
-      >
+      <span className={`flex-none text-[10px] font-bold tracking-[0.06em] ${meta.cls}`}>
         {meta.label}
       </span>
       {polarity === "absent" ? (
@@ -338,7 +332,7 @@ function EvidenceRow({ ev }: { ev: Evidence }) {
       ) : (
         <span className="flex-1 font-mono text-[11px] leading-[1.65]">“{ev.quote}”</span>
       )}
-      <span className="text-ink-3 flex-none font-mono text-[9.5px] tabular-nums">
+      <span className="text-ink-4 flex-none text-[11.5px] tabular-nums">
         {ev.confidence.toFixed(2)}
       </span>
     </div>

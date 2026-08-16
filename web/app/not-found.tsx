@@ -18,7 +18,7 @@ export default function NotFound() {
           That page doesn&apos;t exist — nothing was deleted or moved.
         </p>
         <Link href="/roles" className={btn("primary", "mt-6")}>
-          BACK TO ROLES
+          Back to roles
         </Link>
       </main>
     </div>

@@ -65,15 +65,15 @@ export function CandidateCard({
           <div className="mt-[14px] flex items-center">
             <BandBadge band={card.score.band} value={card.score.overall} />
             <span
-              className="text-ink-3 ml-auto font-mono text-[10px] tabular-nums"
+              className="text-ink-4 ml-auto text-[11.5px] tabular-nums"
               title={`confidence ${card.score.confidence}`}
             >
               {card.score.confidence.toFixed(2)}
             </span>
           </div>
           {card.score.topStrength && (
-            <div className="text-ink-2 mt-3 flex gap-[7px] text-[12px] leading-[1.5]">
-              <span className="text-ink-3 flex-none font-mono">↳</span>
+            <div className="text-ink-2 mt-3 flex gap-[7px] text-[12.5px] leading-[1.5]">
+              <span className="text-ink-4 flex-none">↳</span>
               <span>{card.score.topStrength}</span>
             </div>
           )}

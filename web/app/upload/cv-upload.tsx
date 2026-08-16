@@ -115,7 +115,7 @@ export function CvUpload() {
         <div className="text-ink-3 mt-[6px] text-[12.5px]">
           or click to browse · we read every page, not just keywords
         </div>
-        <span className={btn("quiet", "mt-5")}>BROWSE FILES</span>
+        <span className={btn("quiet", "mt-5")}>Browse files</span>
         <input
           ref={inputRef}
           type="file"
@@ -132,10 +132,10 @@ export function CvUpload() {
       {items.length > 0 && (
         <>
           <div className="mt-10 flex items-baseline justify-between">
-            <span className="text-ink-3 font-mono text-[10px] font-semibold tracking-[0.14em]">
-              THIS UPLOAD — {items.length} FILE{items.length > 1 ? "S" : ""}
+            <span className="text-ink-3 text-[11px] font-semibold tracking-[0.06em] uppercase">
+              This upload — {items.length} file{items.length > 1 ? "s" : ""}
             </span>
-            <span className="text-ink-3 flex items-center gap-[6px] font-mono text-[9.5px] tabular-nums">
+            <span className="text-ink-3 flex items-center gap-[6px] text-[12.5px] tabular-nums">
               {uploading > 0 && (
                 <span className="bg-signal size-1 rounded-full [animation:var(--animate-pulse-dot)]" />
               )}
@@ -157,19 +157,19 @@ export function CvUpload() {
                   {it.status === "error" ? (
                     <span className="text-weak-text mt-[5px] block text-[11px]">{it.error}</span>
                   ) : (
-                    <span className="text-ink-3 mt-[5px] block font-mono text-[9.5px]">
+                    <span className="text-ink-3 mt-[5px] block text-[11.5px] tabular-nums">
                       {it.size}
                     </span>
                   )}
                 </span>
                 {it.status === "uploading" && <ScoringPill label="uploading…" />}
                 {it.status === "done" && (
-                  <span className="text-strong-text bg-strong-bg border-strong-border inline-flex items-center rounded-xs border px-[9px] py-[2.5px] font-mono text-[10px] font-medium">
+                  <span className="text-strong-text bg-strong-bg border-strong-border inline-flex items-center rounded-xs border px-2.5 py-1 text-[11.5px] leading-none font-semibold">
                     in applied
                   </span>
                 )}
                 {it.status === "error" && (
-                  <span className="text-weak-text font-mono text-[10px]">failed</span>
+                  <span className="text-weak-text text-[11.5px] font-semibold">Failed</span>
                 )}
               </div>
             ))}
@@ -181,9 +181,9 @@ export function CvUpload() {
         <span>Leave anytime — uploads keep going and the board updates itself.</span>
         <Link
           href="/pipeline"
-          className="text-ink-2 hover:text-signal-ink font-mono text-[10px] tracking-[0.08em] transition-colors duration-200"
+          className="text-ink-2 hover:text-signal-ink text-[13px] font-semibold transition-colors duration-200"
         >
-          VIEW PIPELINE →
+          View pipeline →
         </Link>
       </div>
     </div>
