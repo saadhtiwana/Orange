@@ -6,6 +6,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import type { DragEvent } from "react";
 
 import { CandidateCard } from "@/components/candidate-card";
+import { btn, DisplayTitle, LABEL } from "@/components/ui";
 import { api } from "@/lib/api";
 import { adjacentStage, boardTotals, isInStage, moveCardLocally } from "@/lib/pipeline/board-utils";
 import {
@@ -71,21 +72,18 @@ export function PipelineBoard() {
   const totals = useMemo(() => (board ? boardTotals(board) : { all: 0, scoring: 0 }), [board]);
 
   if (error && !board) {
-    return <p className="text-weak-text p-10 font-mono text-sm">{error}</p>;
+    return <p className="text-weak-text p-10 text-sm">{error}</p>;
   }
   if (!board) {
-    return <p className="text-ink-3 p-10 font-mono text-sm">Loading board…</p>;
+    return <p className="text-ink-3 p-10 text-sm">Loading board…</p>;
   }
 
   return (
     <div className="o-fade-in flex min-h-0 flex-1 flex-col">
       {/* Job header */}
-      <div className="border-line flex flex-none items-end justify-between gap-6 border-b px-7 py-6">
-        <div className="flex items-baseline gap-[11px]">
-          <span className="text-ink-2 font-serif text-[32px] leading-none italic">Pipeline</span>
-          <span className="text-[26px] font-extrabold tracking-[-0.03em]">{board.jobTitle}</span>
-        </div>
-        <div className="text-ink-3 flex items-center gap-2 pb-1 font-mono text-[10.5px]">
+      <div className="border-line bg-card flex flex-none items-end justify-between gap-6 border-b px-7 py-6">
+        <DisplayTitle lead="Pipeline" subject={board.jobTitle} size={28} />
+        <div className="text-ink-3 flex items-center gap-2 pb-1 text-[13px] tabular-nums">
           {totals.scoring > 0 && (
             <span className="bg-signal size-[5px] rounded-full [animation:var(--animate-pulse-dot)]" />
           )}
@@ -101,11 +99,8 @@ export function PipelineBoard() {
           <p className="text-ink-2 mt-2 max-w-sm text-[13px] leading-[1.6]">
             Upload CVs and Orange starts reading immediately — first scores land within a minute.
           </p>
-          <Link
-            href="/upload"
-            className="bg-signal hover:bg-signal-hover mt-6 inline-flex h-9 items-center rounded-lg px-[18px] font-mono text-[10.5px] font-semibold tracking-[0.08em] text-white transition-colors"
-          >
-            UPLOAD CVS
+          <Link href="/upload" className={btn("primary", "mt-6")}>
+            Upload CVs
           </Link>
         </div>
       ) : (
@@ -129,16 +124,26 @@ export function PipelineBoard() {
                   }}
                   onDragLeave={() => setDragOverStage((s) => (s === stage ? null : s))}
                   onDrop={() => handleDrop(stage)}
-                  className={`flex flex-col gap-[14px] px-4 pt-[22px] pb-8 ${
+                  className={`o-stagger ease-out flex flex-col gap-[14px] px-4 pt-[22px] pb-8 transition-colors duration-[var(--o-dur-fast)] ${
                     index > 0 ? "border-line border-l" : ""
-                  } ${dragOverStage === stage ? "bg-signal/[0.04]" : ""}`}
+                  } ${dragOverStage === stage ? "bg-signal-tint" : ""}`}
                 >
                   <div className="flex items-baseline gap-2 px-[2px] pb-1">
-                    <span className="text-ink-2 font-mono text-[10px] font-semibold tracking-[0.12em]">
-                      {STAGE_LABELS[stage].toUpperCase()}
+                    <span className={LABEL}>{STAGE_LABELS[stage]}</span>
+                    <span className="text-ink-4 text-[11px] font-semibold tabular-nums">
+                      {cards.length}
                     </span>
-                    <span className="text-ink-3 font-mono text-[10px]">{cards.length}</span>
                   </div>
+
+                  {/* Drop affordance: a placeholder the card will land in, so
+                      the target reads as a slot rather than just a tinted
+                      column. Only shown for the column being dragged over. */}
+                  {dragOverStage === stage && draggingId && (
+                    <div
+                      data-no-stagger
+                      className="border-signal bg-signal-tint h-[52px] rounded-lg border-2 border-dashed"
+                    />
+                  )}
 
                   {cards.map((card) => (
                     <CandidateCard
@@ -166,7 +171,7 @@ export function PipelineBoard() {
       )}
 
       {error && board && (
-        <div className="border-line text-weak-text flex h-10 flex-none items-center border-t px-7 font-mono text-[10px]">
+        <div className="border-line text-weak-text flex h-10 flex-none items-center border-t px-7 text-[12.5px]">
           {error}
         </div>
       )}

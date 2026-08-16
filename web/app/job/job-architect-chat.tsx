@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 
+import { btn } from "@/components/ui";
 import { api, ApiError } from "@/lib/api";
 import type { ChatTurn } from "@/lib/ai-client";
 import type { JobDescription } from "@/lib/contracts/types";
@@ -47,7 +48,7 @@ export function JobArchitectChat() {
         <ol className="flex flex-col gap-3">
           {history.map((turn, index) => (
             <li key={`${turn.role}-${index}`} className="flex flex-col gap-[7px]">
-              <span className="text-ink-3 flex items-center gap-[6px] font-mono text-[9px] font-semibold tracking-[0.14em]">
+              <span className="text-ink-3 flex items-center gap-[6px] text-[11px] font-semibold tracking-[0.06em] uppercase">
                 {turn.role === "assistant" && (
                   <span className="bg-signal size-[5px] rounded-full" />
                 )}
@@ -72,32 +73,36 @@ export function JobArchitectChat() {
             onChange={(event) => setBrief(event.target.value)}
             rows={5}
             placeholder="Senior backend engineer in Berlin, hybrid. Python and Postgres, payments experience matters. Five years or so."
-            className="border-line-2 bg-card focus:border-signal w-full resize-y rounded-lg border p-3 text-[13.5px] outline-none"
+            className="border-line-3 bg-card focus:border-signal w-full resize-y rounded-md border p-3 text-[13.5px] transition-colors duration-200 outline-none"
           />
           <button
             type="submit"
             disabled={pending || brief.trim().length === 0}
-            className="bg-signal hover:bg-signal-hover self-start rounded-lg px-4 py-2 font-mono text-[10.5px] font-semibold tracking-[0.08em] text-white transition-colors disabled:opacity-40"
+            className={btn("primary", "self-start")}
           >
-            {pending ? "DRAFTING…" : "DRAFT JOB DESCRIPTION"}
+            {pending ? "Drafting…" : "Draft job description"}
           </button>
         </form>
 
         {error && (
           <p
             role="alert"
-            className="text-weak-text bg-weak-bg border-weak-border rounded-lg border p-3 text-[13px]"
+            className="text-weak-text bg-weak-bg border-weak-border rounded-md border p-3 text-[13px]"
           >
             {error}
           </p>
         )}
       </div>
 
-      <div className="border-line bg-card rounded-xl border p-6">
+      <div className="border-line bg-card shadow-card rounded-lg border p-6">
         {jobDescription ? (
           <>
             <JobDescriptionView jobDescription={jobDescription} />
-            {jobId && <p className="text-ink-3 mt-4 font-mono text-[10px]">Saved as {jobId}</p>}
+            {jobId && (
+              <p className="text-ink-3 mt-4 text-[12px]">
+                Saved as <span className="font-mono">{jobId}</span>
+              </p>
+            )}
           </>
         ) : (
           <p className="text-ink-3 text-[13px]">
