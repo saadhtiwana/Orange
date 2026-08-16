@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRef, useState } from "react";
 
 import { OrangeLogo } from "@/components/orange-logo";
-import { ScoringPill } from "@/components/ui";
+import { btn, DisplayTitle, ScoringPill } from "@/components/ui";
 
 /**
  * CV upload — the design-system drop zone wired to the real ingestion endpoint
@@ -79,10 +79,7 @@ export function CvUpload() {
 
   return (
     <div className="o-fade-in mx-auto w-full max-w-[760px] px-5 pt-14 pb-24 md:px-10">
-      <div className="flex items-baseline gap-3">
-        <span className="text-ink-2 font-serif text-[42px] leading-none italic">Upload</span>
-        <span className="text-[36px] font-extrabold tracking-[-0.03em] lowercase">cvs</span>
-      </div>
+      <DisplayTitle lead="Upload" subject="cvs" subjectClassName="lowercase" />
       <p className="text-ink-2 mt-[14px] text-[13.5px] leading-[1.6]">
         Drop in PDF or DOCX résumés (max 10MB each). Each becomes a candidate in Applied while
         Orange reads it in the background.
@@ -109,8 +106,8 @@ export function CvUpload() {
           setDragOver(false);
           void handleFiles(e.dataTransfer.files);
         }}
-        className={`mt-8 flex cursor-pointer flex-col items-center rounded-xl border border-dashed px-10 py-13 text-center transition-colors ${
-          dragOver ? "border-ink" : "border-line-2 hover:border-ink"
+        className={`mt-8 flex cursor-pointer flex-col items-center rounded-xl border-2 border-dashed px-10 py-13 text-center transition-colors duration-200 ${
+          dragOver ? "border-signal bg-signal-tint" : "border-line-2 hover:border-ink"
         }`}
       >
         <OrangeLogo size={40} />
@@ -118,9 +115,7 @@ export function CvUpload() {
         <div className="text-ink-3 mt-[6px] text-[12.5px]">
           or click to browse · we read every page, not just keywords
         </div>
-        <span className="border-line-2 text-ink mt-5 inline-flex h-9 items-center rounded-lg border px-[18px] font-mono text-[10.5px] font-medium tracking-[0.08em]">
-          BROWSE FILES
-        </span>
+        <span className={btn("quiet", "mt-5")}>BROWSE FILES</span>
         <input
           ref={inputRef}
           type="file"
@@ -140,7 +135,7 @@ export function CvUpload() {
             <span className="text-ink-3 font-mono text-[10px] font-semibold tracking-[0.14em]">
               THIS UPLOAD — {items.length} FILE{items.length > 1 ? "S" : ""}
             </span>
-            <span className="text-ink-3 flex items-center gap-[6px] font-mono text-[9.5px]">
+            <span className="text-ink-3 flex items-center gap-[6px] font-mono text-[9.5px] tabular-nums">
               {uploading > 0 && (
                 <span className="bg-signal size-1 rounded-full [animation:var(--animate-pulse-dot)]" />
               )}
@@ -149,7 +144,7 @@ export function CvUpload() {
             </span>
           </div>
 
-          <div className="border-line bg-card mt-[14px] rounded-xl border">
+          <div className="border-line bg-card shadow-card mt-[14px] rounded-lg border">
             {items.map((it, i) => (
               <div
                 key={it.id}
@@ -169,7 +164,7 @@ export function CvUpload() {
                 </span>
                 {it.status === "uploading" && <ScoringPill label="uploading…" />}
                 {it.status === "done" && (
-                  <span className="text-strong-text bg-strong-bg border-strong-border inline-flex items-center rounded border px-[9px] py-[2.5px] font-mono text-[10px] font-medium">
+                  <span className="text-strong-text bg-strong-bg border-strong-border inline-flex items-center rounded-xs border px-[9px] py-[2.5px] font-mono text-[10px] font-medium">
                     in applied
                   </span>
                 )}
@@ -186,7 +181,7 @@ export function CvUpload() {
         <span>Leave anytime — uploads keep going and the board updates itself.</span>
         <Link
           href="/pipeline"
-          className="text-ink-2 hover:text-signal font-mono text-[10px] tracking-[0.08em]"
+          className="text-ink-2 hover:text-signal-ink font-mono text-[10px] tracking-[0.08em] transition-colors duration-200"
         >
           VIEW PIPELINE →
         </Link>

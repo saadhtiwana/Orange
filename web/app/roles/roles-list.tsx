@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
+import { btn, DisplayTitle } from "@/components/ui";
 import { api } from "@/lib/api";
 import type { JobDescription } from "@/lib/contracts/types";
 
@@ -57,18 +58,12 @@ export function RolesList() {
     <div className="o-fade-in mx-auto w-full max-w-[1040px] px-10 pt-13 pb-24">
       <div className="flex items-end justify-between gap-6">
         <div>
-          <div className="flex items-baseline gap-3">
-            <span className="text-ink-2 font-serif text-[42px] leading-none italic">Open</span>
-            <span className="text-[36px] font-extrabold tracking-[-0.03em] lowercase">roles</span>
-          </div>
+          <DisplayTitle lead="Open" subject="roles" subjectClassName="lowercase" />
           <div className="text-ink-3 mt-3 text-[13.5px]">
             Describe a role, drop in CVs — Orange reads every one and shows its work.
           </div>
         </div>
-        <Link
-          href="/job"
-          className="bg-signal hover:bg-signal-hover inline-flex h-9 items-center rounded-lg px-[18px] font-mono text-[10.5px] font-semibold tracking-[0.08em] text-white transition-colors"
-        >
+        <Link href="/job" className={btn("primary")}>
           NEW ROLE
         </Link>
       </div>
@@ -84,15 +79,12 @@ export function RolesList() {
       {error && <p className="text-weak-text mt-6 font-mono text-sm">{error}</p>}
       {!roles && !error && <p className="text-ink-3 mt-6 font-mono text-sm">Loading roles…</p>}
       {roles?.length === 0 && (
-        <div className="border-line mt-[14px] flex flex-col items-center rounded-[10px] border border-dashed py-16 text-center">
+        <div className="border-line-2 mt-[14px] flex flex-col items-center rounded-lg border border-dashed py-16 text-center">
           <div className="text-[15px] font-semibold">No roles yet</div>
           <p className="text-ink-2 mt-2 max-w-sm text-[13px] leading-[1.6]">
             Describe your first role and Orange turns it into a structured job to score against.
           </p>
-          <Link
-            href="/job"
-            className="bg-signal hover:bg-signal-hover mt-5 inline-flex h-9 items-center rounded-lg px-[18px] font-mono text-[10.5px] font-semibold tracking-[0.08em] text-white transition-colors"
-          >
+          <Link href="/job" className={btn("primary", "mt-5")}>
             NEW ROLE
           </Link>
         </div>
@@ -102,7 +94,7 @@ export function RolesList() {
         <Link
           key={job.id}
           href="/pipeline"
-          className="bg-card border-line hover:border-line-2 text-ink mt-[10px] grid grid-cols-[1fr_auto] items-center gap-5 rounded-[10px] border px-5 py-[22px] transition-colors first:mt-[14px] md:grid-cols-[2.2fr_1fr_130px_130px]"
+          className="bg-card border-line hover:border-line-2 shadow-card hover:shadow-card-hover text-ink mt-[10px] grid grid-cols-[1fr_auto] items-center gap-5 rounded-lg border px-5 py-[22px] transition-[border-color,box-shadow] duration-200 first:mt-[14px] md:grid-cols-[2.2fr_1fr_130px_130px]"
         >
           <div>
             <div className="text-[15.5px] font-semibold tracking-[-0.01em]">{job.title}</div>
@@ -113,8 +105,10 @@ export function RolesList() {
           <div className="text-ink-2 hidden text-[12px] md:block">
             {WORK_MODE_LABELS[job.work_mode] ?? job.work_mode}
           </div>
-          <div className="font-mono text-[12px]">{total}</div>
-          <div className="text-ink-2 hidden items-center gap-[6px] font-mono text-[11px] md:flex">
+          <div className="text-signal-ink font-mono text-[12px] font-semibold tabular-nums">
+            {total}
+          </div>
+          <div className="text-ink-2 hidden items-center gap-[6px] font-mono text-[11px] tabular-nums md:flex">
             {scoring > 0 ? (
               <>
                 <span className="bg-signal size-1 rounded-full [animation:var(--animate-pulse-dot)]" />

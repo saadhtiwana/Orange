@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 
+import { btn } from "@/components/ui";
 import { api, ApiError } from "@/lib/api";
 import type { ChatTurn } from "@/lib/ai-client";
 import type { JobDescription } from "@/lib/contracts/types";
@@ -72,12 +73,12 @@ export function JobArchitectChat() {
             onChange={(event) => setBrief(event.target.value)}
             rows={5}
             placeholder="Senior backend engineer in Berlin, hybrid. Python and Postgres, payments experience matters. Five years or so."
-            className="border-line-2 bg-card focus:border-signal w-full resize-y rounded-lg border p-3 text-[13.5px] outline-none"
+            className="border-line-3 bg-card focus:border-signal w-full resize-y rounded-md border p-3 text-[13.5px] transition-colors duration-200 outline-none"
           />
           <button
             type="submit"
             disabled={pending || brief.trim().length === 0}
-            className="bg-signal hover:bg-signal-hover self-start rounded-lg px-4 py-2 font-mono text-[10.5px] font-semibold tracking-[0.08em] text-white transition-colors disabled:opacity-40"
+            className={btn("primary", "self-start")}
           >
             {pending ? "DRAFTING…" : "DRAFT JOB DESCRIPTION"}
           </button>
@@ -86,14 +87,14 @@ export function JobArchitectChat() {
         {error && (
           <p
             role="alert"
-            className="text-weak-text bg-weak-bg border-weak-border rounded-lg border p-3 text-[13px]"
+            className="text-weak-text bg-weak-bg border-weak-border rounded-md border p-3 text-[13px]"
           >
             {error}
           </p>
         )}
       </div>
 
-      <div className="border-line bg-card rounded-xl border p-6">
+      <div className="border-line bg-card shadow-card rounded-lg border p-6">
         {jobDescription ? (
           <>
             <JobDescriptionView jobDescription={jobDescription} />

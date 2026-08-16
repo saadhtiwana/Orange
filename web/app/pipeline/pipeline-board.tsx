@@ -6,6 +6,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import type { DragEvent } from "react";
 
 import { CandidateCard } from "@/components/candidate-card";
+import { btn, DisplayTitle } from "@/components/ui";
 import { api } from "@/lib/api";
 import { adjacentStage, boardTotals, isInStage, moveCardLocally } from "@/lib/pipeline/board-utils";
 import {
@@ -80,12 +81,9 @@ export function PipelineBoard() {
   return (
     <div className="o-fade-in flex min-h-0 flex-1 flex-col">
       {/* Job header */}
-      <div className="border-line flex flex-none items-end justify-between gap-6 border-b px-7 py-6">
-        <div className="flex items-baseline gap-[11px]">
-          <span className="text-ink-2 font-serif text-[32px] leading-none italic">Pipeline</span>
-          <span className="text-[26px] font-extrabold tracking-[-0.03em]">{board.jobTitle}</span>
-        </div>
-        <div className="text-ink-3 flex items-center gap-2 pb-1 font-mono text-[10.5px]">
+      <div className="border-line bg-card flex flex-none items-end justify-between gap-6 border-b px-7 py-6">
+        <DisplayTitle lead="Pipeline" subject={board.jobTitle} size={28} />
+        <div className="text-ink-3 flex items-center gap-2 pb-1 font-mono text-[10.5px] tabular-nums">
           {totals.scoring > 0 && (
             <span className="bg-signal size-[5px] rounded-full [animation:var(--animate-pulse-dot)]" />
           )}
@@ -101,10 +99,7 @@ export function PipelineBoard() {
           <p className="text-ink-2 mt-2 max-w-sm text-[13px] leading-[1.6]">
             Upload CVs and Orange starts reading immediately — first scores land within a minute.
           </p>
-          <Link
-            href="/upload"
-            className="bg-signal hover:bg-signal-hover mt-6 inline-flex h-9 items-center rounded-lg px-[18px] font-mono text-[10.5px] font-semibold tracking-[0.08em] text-white transition-colors"
-          >
+          <Link href="/upload" className={btn("primary", "mt-6")}>
             UPLOAD CVS
           </Link>
         </div>
@@ -129,15 +124,17 @@ export function PipelineBoard() {
                   }}
                   onDragLeave={() => setDragOverStage((s) => (s === stage ? null : s))}
                   onDrop={() => handleDrop(stage)}
-                  className={`flex flex-col gap-[14px] px-4 pt-[22px] pb-8 ${
+                  className={`flex flex-col gap-[14px] px-4 pt-[22px] pb-8 transition-colors duration-200 ${
                     index > 0 ? "border-line border-l" : ""
-                  } ${dragOverStage === stage ? "bg-signal/[0.04]" : ""}`}
+                  } ${dragOverStage === stage ? "bg-signal-tint" : ""}`}
                 >
                   <div className="flex items-baseline gap-2 px-[2px] pb-1">
                     <span className="text-ink-2 font-mono text-[10px] font-semibold tracking-[0.12em]">
                       {STAGE_LABELS[stage].toUpperCase()}
                     </span>
-                    <span className="text-ink-3 font-mono text-[10px]">{cards.length}</span>
+                    <span className="text-ink-3 font-mono text-[10px] tabular-nums">
+                      {cards.length}
+                    </span>
                   </div>
 
                   {cards.map((card) => (

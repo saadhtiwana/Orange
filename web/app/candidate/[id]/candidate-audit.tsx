@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-import { BandBadge, OutcomeBadge, ScoringPill } from "@/components/ui";
+import { BandBadge, DisplayTitle, OutcomeBadge, ScoringPill } from "@/components/ui";
 import { api, ApiError } from "@/lib/api";
 import type {
   CandidateProfile,
@@ -68,14 +68,11 @@ export function CandidateAudit({ candidateId }: { candidateId: string }) {
   if (error) {
     return (
       <div className="mx-auto w-full max-w-md px-10 py-24 text-center">
-        <div className="flex items-baseline justify-center gap-[10px]">
-          <span className="text-ink-2 font-serif text-[34px] leading-none italic">Nothing</span>
-          <span className="text-[28px] font-extrabold tracking-[-0.03em]">here</span>
-        </div>
+        <DisplayTitle lead="Nothing" subject="here" size={30} className="justify-center" />
         <p className="text-ink-2 mt-3 text-[13px]">{error}</p>
         <Link
           href="/pipeline"
-          className="text-ink-2 hover:text-signal mt-6 inline-block font-mono text-[10px] tracking-[0.08em]"
+          className="text-ink-2 hover:text-signal-ink mt-6 inline-block font-mono text-[10px] tracking-[0.08em] transition-colors duration-200"
         >
           ← BACK TO PIPELINE
         </Link>
@@ -103,28 +100,24 @@ export function CandidateAudit({ candidateId }: { candidateId: string }) {
     <div className="o-fade-in mx-auto w-full max-w-[1200px] px-10 pt-8 pb-24">
       <Link
         href="/pipeline"
-        className="text-ink-3 hover:text-signal font-mono text-[10px] tracking-[0.1em]"
+        className="text-ink-3 hover:text-signal-ink font-mono text-[10px] tracking-[0.1em] transition-colors duration-200"
       >
         ← PIPELINE
       </Link>
 
       {/* Header */}
-      <div className="mt-5 flex flex-wrap items-baseline gap-3">
-        <span className="text-ink-2 font-serif text-[42px] leading-none italic">{firstName}</span>
-        {lastName && (
-          <span className="text-[36px] font-extrabold tracking-[-0.03em]">{lastName}</span>
-        )}
+      <DisplayTitle lead={firstName} subject={lastName || undefined} className="mt-5 gap-x-3">
         {score && (
-          <span className="translate-y-[-6px]">
-            <BandBadge band={score.overall.band} value={score.overall.score} />
-          </span>
+          <>
+            <span className="translate-y-[-6px]">
+              <BandBadge band={score.overall.band} value={score.overall.score} />
+            </span>
+            <span className="text-ink-3 font-mono text-[10px] tabular-nums">
+              conf {score.overall.confidence.toFixed(2)}
+            </span>
+          </>
         )}
-        {score && (
-          <span className="text-ink-3 font-mono text-[10px]">
-            conf {score.overall.confidence.toFixed(2)}
-          </span>
-        )}
-      </div>
+      </DisplayTitle>
       <div className="text-ink-3 mt-[10px] text-[13.5px]">
         {candidate.headline}
         {location && ` · ${location}`}
@@ -137,7 +130,7 @@ export function CandidateAudit({ candidateId }: { candidateId: string }) {
       </div>
 
       {!score ? (
-        <div className="border-line bg-card mt-8 flex items-center gap-4 rounded-xl border p-6">
+        <div className="border-line bg-card shadow-card mt-8 flex items-center gap-4 rounded-lg border p-6">
           <ScoringPill />
           <span className="text-ink-2 text-[13px]">
             This candidate is still being ranked — no score or evidence yet.
@@ -156,7 +149,7 @@ export function CandidateAudit({ candidateId }: { candidateId: string }) {
             {/* Left: breakdown + evidence trail */}
             <div className="min-w-0 flex-1 basis-[560px]">
               <SectionLabel>SCORE BREAKDOWN</SectionLabel>
-              <div className="border-line bg-card mt-[14px] rounded-xl border">
+              <div className="border-line bg-card shadow-card mt-[14px] rounded-lg border">
                 {(score.dimensions ?? []).map((dim, i) => (
                   <div
                     key={dim.dimension}
@@ -168,15 +161,17 @@ export function CandidateAudit({ candidateId }: { candidateId: string }) {
                       {dim.dimension}
                     </span>
                     <span className="flex items-center gap-[10px]">
-                      <span className="bg-line inline-block h-[3px] w-[110px] overflow-hidden rounded-sm">
+                      <span className="bg-line inline-block h-[3px] w-[110px] overflow-hidden rounded-xs">
                         <span
-                          className="bg-ink-3 block h-full"
+                          className="bg-signal block h-full"
                           style={{ width: `${dim.score}%` }}
                         />
                       </span>
-                      <span className="font-mono text-[11.5px] font-semibold">{dim.score}</span>
+                      <span className="text-signal-ink font-mono text-[11.5px] font-semibold tabular-nums">
+                        {dim.score}
+                      </span>
                     </span>
-                    <span className="text-ink-3 ml-auto font-mono text-[10px]">
+                    <span className="text-ink-3 ml-auto font-mono text-[10px] tabular-nums">
                       w {dim.weight.toFixed(2)}
                     </span>
                     <span className="text-ink-2 basis-full text-[12.5px] leading-[1.5]">
@@ -192,7 +187,7 @@ export function CandidateAudit({ candidateId }: { candidateId: string }) {
                   every quote is verbatim from the cv
                 </span>
               </div>
-              <div className="border-line bg-card mt-[14px] rounded-xl border">
+              <div className="border-line bg-card shadow-card mt-[14px] rounded-lg border">
                 {(score.requirement_results ?? []).map((result, i) => {
                   const evidence = evidenceByReq.get(result.requirement_id) ?? [];
                   return (
@@ -220,7 +215,7 @@ export function CandidateAudit({ candidateId }: { candidateId: string }) {
 
             {/* Right: structured profile */}
             <div className="flex basis-[300px] flex-col gap-[14px]">
-              <div className="border-line bg-card rounded-xl border p-[22px]">
+              <div className="border-line bg-card shadow-card rounded-lg border p-[22px]">
                 <SectionLabel>EXPERIENCE</SectionLabel>
                 <div className="mt-[14px] flex flex-col">
                   {(candidate.work_experience ?? []).map((exp, i) => (
@@ -240,7 +235,7 @@ export function CandidateAudit({ candidateId }: { candidateId: string }) {
               </div>
 
               {(candidate.education ?? []).length > 0 && (
-                <div className="border-line bg-card rounded-xl border p-[22px]">
+                <div className="border-line bg-card shadow-card rounded-lg border p-[22px]">
                   <SectionLabel>EDUCATION</SectionLabel>
                   <div className="mt-[14px] flex flex-col">
                     {(candidate.education ?? []).map((ed, i) => (
@@ -265,7 +260,7 @@ export function CandidateAudit({ candidateId }: { candidateId: string }) {
               )}
 
               {(candidate.skills ?? []).length > 0 && (
-                <div className="border-line bg-card rounded-xl border p-[22px]">
+                <div className="border-line bg-card shadow-card rounded-lg border p-[22px]">
                   <SectionLabel>SKILLS</SectionLabel>
                   <div className="mt-3 flex flex-col">
                     {(candidate.skills ?? []).map((skill, i, arr) => (
@@ -304,7 +299,7 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 
 function SummaryCard({ label, dot, items }: { label: string; dot: string; items?: string[] }) {
   return (
-    <div className="border-line bg-card rounded-xl border p-5">
+    <div className="border-line bg-card shadow-card rounded-lg border p-5">
       <div className="text-ink-3 flex items-center gap-[6px] font-mono text-[9px] font-semibold tracking-[0.14em]">
         <span className={`size-[5px] rounded-full ${dot}`} />
         {label}
@@ -330,7 +325,7 @@ function EvidenceRow({ ev }: { ev: Evidence }) {
   const polarity = ev.polarity ?? "supports";
   const meta = POLARITY[polarity];
   return (
-    <div className="bg-paper border-line mt-[10px] ml-[34px] flex items-baseline gap-[10px] rounded-lg border px-[14px] py-[10px]">
+    <div className="bg-subtle border-line mt-[10px] ml-[34px] flex items-baseline gap-[10px] rounded-md border px-[14px] py-[10px]">
       <span
         className={`flex-none font-mono text-[8.5px] font-semibold tracking-[0.12em] ${meta.cls}`}
       >
@@ -343,7 +338,7 @@ function EvidenceRow({ ev }: { ev: Evidence }) {
       ) : (
         <span className="flex-1 font-mono text-[11px] leading-[1.65]">“{ev.quote}”</span>
       )}
-      <span className="text-ink-3 flex-none font-mono text-[9.5px]">
+      <span className="text-ink-3 flex-none font-mono text-[9.5px] tabular-nums">
         {ev.confidence.toFixed(2)}
       </span>
     </div>
