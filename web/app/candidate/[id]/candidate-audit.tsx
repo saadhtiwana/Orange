@@ -3,7 +3,14 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-import { BandBadge, DisplayTitle, LABEL, OutcomeBadge, ScoringPill } from "@/components/ui";
+import {
+  BandBadge,
+  ConfidenceMeter,
+  DisplayTitle,
+  LABEL,
+  OutcomeBadge,
+  ScoringPill,
+} from "@/components/ui";
 import { api, ApiError } from "@/lib/api";
 import type {
   CandidateProfile,
@@ -112,9 +119,7 @@ export function CandidateAudit({ candidateId }: { candidateId: string }) {
             <span className="translate-y-[-6px]">
               <BandBadge band={score.overall.band} value={score.overall.score} />
             </span>
-            <span className="text-ink-4 text-[12.5px] tabular-nums">
-              conf {score.overall.confidence.toFixed(2)}
-            </span>
+            <ConfidenceMeter value={score.overall.confidence} />
           </>
         )}
       </DisplayTitle>

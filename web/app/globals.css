@@ -286,7 +286,19 @@
   --font-weight-bold: 700;
   --font-weight-black: 800;
 
-  --animate-shimmer: o-shimmer 1.8s linear infinite;
+  /* Easing. The built-in CSS curves are too weak to read as intentional, so
+   * the house curves override Tailwind's defaults. ease-in is deliberately
+   * absent: it delays the first frame, which is exactly when the user is
+   * looking, and makes the UI feel sluggish. */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+
+  /* Durations. UI motion stays under 300ms; press feedback is near-instant. */
+  --o-dur-press: 120ms;
+  --o-dur-fast: 160ms;
+  --o-dur-base: 200ms;
+
+  --animate-shimmer: o-shimmer 1.2s linear infinite;
   --animate-pulse-dot: o-pulse 1.4s ease-in-out infinite;
 }
 
@@ -365,17 +377,70 @@ body {
   }
 }
 .o-fade-in {
-  animation: o-fade-in 0.4s ease both;
+  animation: o-fade-in var(--o-dur-base) var(--ease-out) both;
 }
 
-/* Respect users who ask for less motion — disable animations/transitions. */
+/* Board cards enter staggered rather than all at once. The delay is capped so
+ * a long column never makes the recruiter wait on decoration — and the cards
+ * are interactive the whole time, since this only animates opacity/transform. */
+.o-stagger > *:not([data-no-stagger]) {
+  animation: o-fade-in var(--o-dur-base) var(--ease-out) both;
+}
+.o-stagger > *:nth-child(1) {
+  animation-delay: 0ms;
+}
+.o-stagger > *:nth-child(2) {
+  animation-delay: 40ms;
+}
+.o-stagger > *:nth-child(3) {
+  animation-delay: 80ms;
+}
+.o-stagger > *:nth-child(4) {
+  animation-delay: 120ms;
+}
+.o-stagger > *:nth-child(n + 5) {
+  animation-delay: 160ms;
+}
+
+/* Hover transforms only where hovering is real. On touch, `:hover` sticks
+ * after a tap and the card looks stuck in its lifted state. */
+@media (hover: hover) and (pointer: fine) {
+  .o-lift:hover {
+    transform: translateY(-2px);
+  }
+}
+
+/* Press feedback: instant, and on pointer-down rather than release. */
+.o-press {
+  transition: transform var(--o-dur-press) var(--ease-out);
+}
+.o-press:active {
+  transform: scale(0.97);
+}
+
+/* Reduced motion means gentler, not none: opacity and colour still carry
+ * meaning (what's loading, what's hovered), so only movement is removed. */
 @media (prefers-reduced-motion: reduce) {
+  .o-lift:hover,
+  .o-press:active {
+    transform: none;
+  }
+  .o-fade-in,
+  .o-stagger > *:not([data-no-stagger]) {
+    animation: o-reduced-fade var(--o-dur-fast) var(--ease-out) both;
+  }
   *,
   *::before,
   *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+@keyframes o-reduced-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }

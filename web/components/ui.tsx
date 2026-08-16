@@ -12,11 +12,14 @@ import type { RequirementOutcome, ScoreBand } from "@/lib/contracts/types";
 type ButtonVariant = "primary" | "outline" | "quiet";
 
 /** Shared button geometry: 14px bold sans, 3px radius, a 2px border on every
- *  variant so the filled and outlined forms are the same size, and a 200ms
- *  colour fade. Sans at a readable size — not tracked-out mono — is what makes
- *  a button read as a control rather than a caption. */
+ *  variant so the filled and outlined forms are the same size, and a colour
+ *  fade on the house ease-out. Sans at a readable size — not tracked-out mono
+ *  — is what makes a button read as a control rather than a caption.
+ *
+ *  `o-press` scales to 0.97 on :active, so the button answers the pointer on
+ *  press rather than on release. */
 const BUTTON_BASE =
-  "inline-flex h-10 items-center justify-center rounded-xs border-2 px-5 text-[13.5px] leading-[1.4] font-bold whitespace-nowrap transition-[background-color,border-color,color] duration-200 disabled:pointer-events-none disabled:opacity-40";
+  "o-press inline-flex h-10 items-center justify-center rounded-xs border-2 px-5 text-[13.5px] leading-[1.4] font-bold whitespace-nowrap transition-[background-color,border-color,color,transform] duration-[var(--o-dur-base)] ease-out disabled:pointer-events-none disabled:opacity-40";
 
 const BUTTON_VARIANTS: Record<ButtonVariant, string> = {
   /** The one place the accent is spent: the primary action on a screen. */
@@ -130,6 +133,37 @@ export function OutcomeBadge({ outcome }: { outcome: RequirementOutcome }) {
       className={`inline-flex items-center rounded-xs border px-2.5 py-1 text-[11.5px] leading-none font-semibold capitalize ${OUTCOME_CLASSES[outcome]}`}
     >
       {outcome}
+    </span>
+  );
+}
+
+/** How much to trust the score beside it.
+ *
+ *  A raw `0.82` tells a recruiter nothing, and a strong score the model is
+ *  unsure about must not look identical to one it is certain of — that is the
+ *  difference between a defensible hiring decision and a misread. So low
+ *  confidence is called out in the caution colour rather than left neutral,
+ *  and the exact figure stays available on hover and to screen readers. */
+export function ConfidenceMeter({ value, className = "" }: { value: number; className?: string }) {
+  const pct = Math.round(value * 100);
+  const filled = value >= 0.75 ? 3 : value >= 0.5 ? 2 : 1;
+  const low = value < 0.5;
+  return (
+    <span
+      className={`inline-flex items-center gap-[5px] ${low ? "text-fair-text" : "text-ink-4"} ${className}`}
+      title={`Confidence ${pct}% — how sure Orange is of this score`}
+    >
+      <span aria-hidden className="flex items-end gap-[2px]">
+        {[0, 1, 2].map((i) => (
+          <span
+            key={i}
+            className={`w-[3px] rounded-[1px] ${i < filled ? "bg-current" : "bg-line-2"}`}
+            style={{ height: `${4 + i * 2}px` }}
+          />
+        ))}
+      </span>
+      <span className="text-[11.5px] tabular-nums">{pct}%</span>
+      <span className="sr-only">confidence{low ? ", low — review the evidence" : ""}</span>
     </span>
   );
 }

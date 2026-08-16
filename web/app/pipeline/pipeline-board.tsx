@@ -124,7 +124,7 @@ export function PipelineBoard() {
                   }}
                   onDragLeave={() => setDragOverStage((s) => (s === stage ? null : s))}
                   onDrop={() => handleDrop(stage)}
-                  className={`flex flex-col gap-[14px] px-4 pt-[22px] pb-8 transition-colors duration-200 ${
+                  className={`o-stagger ease-out flex flex-col gap-[14px] px-4 pt-[22px] pb-8 transition-colors duration-[var(--o-dur-fast)] ${
                     index > 0 ? "border-line border-l" : ""
                   } ${dragOverStage === stage ? "bg-signal-tint" : ""}`}
                 >
@@ -134,6 +134,16 @@ export function PipelineBoard() {
                       {cards.length}
                     </span>
                   </div>
+
+                  {/* Drop affordance: a placeholder the card will land in, so
+                      the target reads as a slot rather than just a tinted
+                      column. Only shown for the column being dragged over. */}
+                  {dragOverStage === stage && draggingId && (
+                    <div
+                      data-no-stagger
+                      className="border-signal bg-signal-tint h-[52px] rounded-lg border-2 border-dashed"
+                    />
+                  )}
 
                   {cards.map((card) => (
                     <CandidateCard

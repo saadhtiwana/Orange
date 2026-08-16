@@ -106,7 +106,7 @@ export function CvUpload() {
           setDragOver(false);
           void handleFiles(e.dataTransfer.files);
         }}
-        className={`mt-8 flex cursor-pointer flex-col items-center rounded-xl border-2 border-dashed px-10 py-13 text-center transition-colors duration-200 ${
+        className={`ease-out mt-8 flex cursor-pointer flex-col items-center rounded-xl border-2 border-dashed px-10 py-13 text-center transition-colors duration-[var(--o-dur-fast)] ${
           dragOver ? "border-signal bg-signal-tint" : "border-line-2 hover:border-ink"
         }`}
       >
